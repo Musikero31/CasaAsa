@@ -1,11 +1,12 @@
 ﻿namespace CasaAsa.Data.Models
 {
-    public interface IEntity
+    public interface IEntityDefault
     {
+        int Id { get; set; }
         bool ActiveStatus { get; set; }
-        int CreatedBy { get; set; }
+        Guid CreatedBy { get; set; }
         DateTime CreatedDate { get; set; }
-        int? UpdatedBy { get; set; }
+        Guid? UpdatedBy { get; set; }
         DateTime? UpdatedDate { get; set; }
     }
 }

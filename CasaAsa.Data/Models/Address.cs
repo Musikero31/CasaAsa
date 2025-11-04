@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CasaAsa.Data.Models
 {
-    public class Address : IEntity
+    public class Address : IEntityDefault
     {
         public int Id { get; set; }
         public int UserID { get; set; }
@@ -19,9 +19,9 @@ namespace CasaAsa.Data.Models
         public string ContactPerson { get; set; }
         public string ContactNumber { get; set; }
         public bool ActiveStatus { get; set; }
-        public int CreatedBy { get; set; }
+        public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
-        public int? UpdatedBy { get; set; }
+        public Guid? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
     }
 }
