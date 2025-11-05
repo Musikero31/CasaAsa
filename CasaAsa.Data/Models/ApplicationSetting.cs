@@ -1,14 +1,11 @@
 ﻿namespace CasaAsa.Data.Models
 {
-    public class OrderDetail : IEntityDefault
+    public class ApplicationSetting : IEntityDefault
     {
         public int Id { get; set; }
-        public int Quantity { get; set; }
-        public decimal Price { get; set; }
-
-        public int OrderId { get; set; }
-        public Order Order { get; set; }
-
+        public string Category { get; set; }
+        public string Code { get; set; }
+        public string Value { get; set; }
         public bool ActiveStatus { get; set; }
         public Guid CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }

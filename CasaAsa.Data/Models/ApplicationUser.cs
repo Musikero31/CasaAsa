@@ -10,5 +10,7 @@ namespace CasaAsa.Data.Models
 
         [NotMapped]
         public string FullName => $"{FirstName} {LastName}".Trim();
+
+        public ICollection<Address> Addresses { get; set; }
     }
 }

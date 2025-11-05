@@ -9,5 +9,7 @@
         public DateTime CreatedDate { get; set; }
         public Guid? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
+
+        public ICollection<MenuDetails> MenuDetails { get; set; }
     }
 }
