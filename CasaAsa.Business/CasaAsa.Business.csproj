@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Component\" />
+    <ProjectReference Include="..\CasaAsa.Data\CasaAsa.Data.csproj" />
   </ItemGroup>
 
 </Project>
