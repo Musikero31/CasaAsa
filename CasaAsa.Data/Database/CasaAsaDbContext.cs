@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CasaAsa.Data.Database
 {
-    public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
+    public class CasaAsaDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
+        public CasaAsaDbContext(DbContextOptions<CasaAsaDbContext> options)
             : base(options) { }
 
         // DbSets

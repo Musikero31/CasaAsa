@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CasaAsa.Business\CasaAsa.Business.csproj" />
-    <ProjectReference Include="..\CasaAsa.Data\CasaAsa.Data.csproj" />
   </ItemGroup>
 
 </Project>
