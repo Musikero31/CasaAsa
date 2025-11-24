@@ -12,5 +12,7 @@ namespace CasaAsa.Data.Models
         public string FullName => $"{FirstName} {LastName}".Trim();
 
         public ICollection<Address> Addresses { get; set; }
+
+        public ICollection<IdentityUserRole<string>>? UserRoles { get; set; }
     }
 }

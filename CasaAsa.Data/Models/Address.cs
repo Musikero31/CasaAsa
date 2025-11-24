@@ -17,7 +17,6 @@ namespace CasaAsa.Data.Models
             }
         }
         public int Id { get; set; }
-        public int UserID { get; set; }
         public required string AddressLine1 { get; set; }
         public string? AddressLine2 { get; set; }
         public string? AddressLine3 { get; set; }
