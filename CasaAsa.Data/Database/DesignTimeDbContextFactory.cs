@@ -10,7 +10,7 @@ namespace CasaAsa.Data.Database
         {
             // Put a connection string here ONLY for design-time (migrations)
             const string designTimeConnectionString =
-                "Initial Catalog=CasaAsa;Data Source=.;User ID=sa;Password=P@ssw0rd;Persist Security Info=True;Integrated Security=True;TrustServerCertificate=True;";
+                "Server=tcp:casaasa-az-sql.database.windows.net,1433;Initial Catalog=CasaAsaDb;Persist Security Info=False;User ID=sqlazadmin;Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=0;";
 
             var optionsBuilder = new DbContextOptionsBuilder<CasaAsaDbContext>();
             optionsBuilder.UseSqlServer(designTimeConnectionString);
