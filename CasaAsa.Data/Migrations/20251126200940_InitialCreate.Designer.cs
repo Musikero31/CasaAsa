@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CasaAsa.Data.Migrations
 {
     [DbContext(typeof(CasaAsaDbContext))]
-    [Migration("20251125052619_InitialCreate")]
+    [Migration("20251126200940_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
