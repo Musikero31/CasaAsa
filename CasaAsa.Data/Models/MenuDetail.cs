@@ -1,6 +1,6 @@
 ﻿namespace CasaAsa.Data.Models
 {
-    public class MenuDetails : IEntityDefault
+    public class MenuDetail : IEntityDefault
     {
         public int Id { get; set; }
         public required string MenuName { get; set; }

@@ -13,6 +13,11 @@ namespace CasaAsa.Data.Database
         public DbSet<Address> Addresses { get; set; }
         public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<ApplicationRole> Roles { get; set; }
+        public DbSet<MenuCategory> MenuCategories { get; set; }
+        public DbSet<MenuDetail> MenuDetails { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderListSummary> OrderListSummaries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

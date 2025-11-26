@@ -10,6 +10,6 @@
         public Guid? UpdatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
 
-        public ICollection<MenuDetails> MenuDetails { get; set; }
+        public ICollection<MenuDetail> MenuDetails { get; set; }
     }
 }
