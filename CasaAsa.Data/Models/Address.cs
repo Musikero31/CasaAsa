@@ -4,18 +4,6 @@ namespace CasaAsa.Data.Models
 {
     public class Address : IEntityDefault
     {
-        [NotMapped]
-        public string FullAddress
-        {
-            get
-            {
-                string address1 = AddressLine1;
-                string address2 = !string.IsNullOrEmpty(AddressLine2) ? $", {AddressLine2}" : string.Empty;
-                string address3 = !string.IsNullOrEmpty(AddressLine3) ? $", {AddressLine3}" : string.Empty;
-
-                return $"{address1}{address2}{address3}, {City}, {State} {Postcode}";
-            }
-        }
         public int Id { get; set; }
         public required string AddressLine1 { get; set; }
         public string? AddressLine2 { get; set; }

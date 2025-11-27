@@ -11,7 +11,7 @@ namespace CasaAsa.Data.Models
         [NotMapped]
         public string FullName => $"{FirstName} {LastName}".Trim();
 
-        public ICollection<Address> Addresses { get; set; }
+        public ICollection<Address>? Addresses { get; set; }
 
         public ICollection<IdentityUserRole<string>>? UserRoles { get; set; }
     }

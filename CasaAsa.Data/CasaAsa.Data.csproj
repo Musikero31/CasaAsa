@@ -25,4 +25,8 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CasaAsa.Core\CasaAsa.Core.csproj" />
+  </ItemGroup>
+
 </Project>

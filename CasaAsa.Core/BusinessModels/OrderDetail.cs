@@ -1,4 +1,4 @@
-﻿namespace CasaAsa.Business.BusinessModels
+﻿namespace CasaAsa.Core.BusinessModels
 {
     public class OrderDetail
     {
