@@ -23,6 +23,23 @@ namespace CasaAsa.Data.Database
         {
             base.OnModelCreating(builder);
             // custom configs here
+
+            string adminRoleId = "b52d7e53-5cdc-4dd5-8e45-19fb77e9a1e0";
+            string customerRoleId = "8db644e0-6c88-41e5-8be6-f28f3c455447";
+
+            builder.Entity<ApplicationRole>().HasData(
+                new ApplicationRole
+                {
+                    Id = adminRoleId,
+                    Name = "Administrator",
+                    NormalizedName = "Administrator",
+                },
+                new ApplicationRole
+                {
+                    Id = customerRoleId,
+                    Name = "Customer",
+                    NormalizedName = "Customer"
+                });
         }
     }
 }
