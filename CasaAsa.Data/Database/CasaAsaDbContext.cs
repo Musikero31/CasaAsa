@@ -18,6 +18,8 @@ namespace CasaAsa.Data.Database
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderListSummary> OrderListSummaries { get; set; }
+        public DbSet<ApplicationSetting> ApplicationSettings { get; set; }
+        public DbSet<LockOrder> LockOrders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
