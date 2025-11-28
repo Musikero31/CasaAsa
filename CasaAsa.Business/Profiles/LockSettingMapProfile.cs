@@ -4,9 +4,9 @@ using CoreModel = CasaAsa.Core.BusinessModels;
 
 namespace CasaAsa.Business.Profiles
 {
-    public class LockSettingProfile : Profile
+    public class LockSettingMapProfile : Profile
     {
-        public LockSettingProfile()
+        public LockSettingMapProfile()
         {
             CreateMap<DataModel.LockOrder, CoreModel.LockOrder>();
         }

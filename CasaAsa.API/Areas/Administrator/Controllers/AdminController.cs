@@ -27,5 +27,11 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
             return Ok();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Register()
+        {
+            return Ok();
+        }
     }
 }
