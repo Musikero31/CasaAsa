@@ -1,8 +1,8 @@
 ﻿using CasaAsa.Business.Component;
 using CasaAsa.Business.Component.Authentication;
-using CasaAsa.Data;
 using CasaAsa.Data.Database;
 using CasaAsa.Data.Models;
+using CasaAsa.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

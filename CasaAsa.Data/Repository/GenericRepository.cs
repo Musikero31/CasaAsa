@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace CasaAsa.Data
+namespace CasaAsa.Data.Repository
 {
     public class GenericRepository<T> : IRepository<T> where T : class
     {

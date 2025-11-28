@@ -1,7 +1,7 @@
-﻿using CasaAsa.Data;
-using DataModel = CasaAsa.Data.Models;
+﻿using DataModel = CasaAsa.Data.Models;
 using CoreModel = CasaAsa.Core.BusinessModels;
 using AutoMapper;
+using CasaAsa.Data.Repository;
 
 namespace CasaAsa.Business.Component
 {
