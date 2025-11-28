@@ -13,11 +13,28 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CasaAsa.Business\CasaAsa.Business.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Administrator\Controllers\" />
+    <Folder Include="Areas\Administrator\Data\" />
+    <Folder Include="Areas\Administrator\Models\" />
+    <Folder Include="Areas\Administrator\Views\" />
+    <Folder Include="Areas\Menu\Controllers\" />
+    <Folder Include="Areas\Menu\Data\" />
+    <Folder Include="Areas\Menu\Models\" />
+    <Folder Include="Areas\Menu\Views\" />
+    <Folder Include="Areas\OrderBilling\Controllers\" />
+    <Folder Include="Areas\OrderBilling\Data\" />
+    <Folder Include="Areas\OrderBilling\Models\" />
+    <Folder Include="Areas\OrderBilling\Views\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
