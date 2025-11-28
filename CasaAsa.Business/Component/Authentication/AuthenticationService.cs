@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CasaAsa.Business.Component.Authentication
 {
-    public class AuthenticationService
+    public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -30,7 +30,7 @@ namespace CasaAsa.Business.Component.Authentication
                 return new AuthenticationResult
                 {
                     Succeeded = false,
-                    Errors = [ "Email already registered." ]
+                    Errors = ["Email already registered."]
                 };
             }
 
@@ -39,7 +39,7 @@ namespace CasaAsa.Business.Component.Authentication
                 Email = request.Email,
                 UserName = request.Email,
                 //DisplayName = request.DisplayName
-                
+
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
@@ -74,7 +74,7 @@ namespace CasaAsa.Business.Component.Authentication
                 return new AuthenticationResult
                 {
                     Succeeded = false,
-                    Errors = [ "Invalid credentials." ]
+                    Errors = ["Invalid credentials."]
                 };
             }
 
@@ -84,7 +84,7 @@ namespace CasaAsa.Business.Component.Authentication
                 return new AuthenticationResult
                 {
                     Succeeded = false,
-                    Errors = [ "Invalid credentials." ]
+                    Errors = ["Invalid credentials."]
                 };
             }
 

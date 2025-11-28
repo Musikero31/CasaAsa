@@ -2,8 +2,8 @@
 
 namespace CasaAsa.Data.Models
 {
-    public class ApplicationRole : IdentityRole
+    public class ApplicationRole : IdentityRole<Guid>
     {
-        public ICollection<IdentityUserRole<string>>? UserRoles { get; set; }
+        public ICollection<IdentityUserRole<Guid>>? UserRoles { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CasaAsa.Data.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser<Guid>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -13,6 +13,6 @@ namespace CasaAsa.Data.Models
 
         public ICollection<Address>? Addresses { get; set; }
 
-        public ICollection<IdentityUserRole<string>>? UserRoles { get; set; }
+        public ICollection<IdentityUserRole<Guid>>? UserRoles { get; set; }
     }
 }
