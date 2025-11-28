@@ -28,9 +28,13 @@ namespace CasaAsa.Business.Component
         public async Task CreateNewLockOrderDate(DateOnly newDate)
         {
             var data = await _lockRepository.GetAllAsync();
-            var oldData = data.OrderByDescending(l => l.LockDate).FirstOrDefault(l => l.ActiveStatus);
-            oldData!.ActiveStatus = false;
-            _lockRepository.Update(oldData);
+
+            if (data != null && data.ToList().Count > 0)
+            {
+                var oldData = data.OrderByDescending(l => l.LockDate).FirstOrDefault(l => l.ActiveStatus);
+                oldData!.ActiveStatus = false;
+                _lockRepository.Update(oldData);
+            }
 
             await _lockRepository.AddAsync(new DataModel.LockOrder
             {
@@ -38,6 +42,8 @@ namespace CasaAsa.Business.Component
                 LockDate = newDate,
                 CreatedDate = DateTime.Now
             });
+
+            await _lockRepository.SaveChangesAsync();
         }
     }
 }

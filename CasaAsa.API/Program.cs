@@ -48,6 +48,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAutoMapper(x => x.AddMaps(typeof(EmptyProfileMarker).Assembly));
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddComponents();
 builder.Services.AddControllers();
 

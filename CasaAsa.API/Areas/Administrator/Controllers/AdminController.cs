@@ -1,4 +1,5 @@
-﻿using CasaAsa.Business.Component;
+﻿using CasaAsa.API.Areas.Administrator.Models;
+using CasaAsa.Business.Component;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CasaAsa.API.Areas.Administrator.Controllers
@@ -24,6 +25,13 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         public async Task<IActionResult> SetNewLockOrderDate([FromBody] DateOnly newLockOrderDate)
         {
             await _component.CreateNewLockOrderDate(newLockOrderDate);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] CustomerViewModel model)
+        {
 
             return Ok();
         }
