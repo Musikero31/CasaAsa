@@ -1,5 +1,5 @@
-﻿using CasaAsa.Data;
-using CasaAsa.Data.Models;
+﻿using CasaAsa.Data.Models;
+using CasaAsa.Data.Repository;
 
 namespace CasaAsa.Business.Component
 {
