@@ -13,6 +13,7 @@ namespace CasaAsa.Data.Models
         public required string Postcode { get; set; }
         public string? ContactPerson { get; set; }
         public string? ContactNumber { get; set; }
+        public bool IsDefaultAddress { get; set; } = false;
 
         public Guid UserId { get; set; }
         public ApplicationUser User { get; set; }

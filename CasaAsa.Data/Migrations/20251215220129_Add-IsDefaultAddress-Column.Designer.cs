@@ -4,6 +4,7 @@ using CasaAsa.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CasaAsa.Data.Migrations
 {
     [DbContext(typeof(CasaAsaDbContext))]
-    partial class CasaAsaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251215220129_Add-IsDefaultAddress-Column")]
+    partial class AddIsDefaultAddressColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
