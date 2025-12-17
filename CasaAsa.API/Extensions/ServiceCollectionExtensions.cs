@@ -1,5 +1,6 @@
 ﻿using CasaAsa.Business.Component;
 using CasaAsa.Business.Component.Authentication;
+using CasaAsa.Core.Abstraction;
 using CasaAsa.Data.Database;
 using CasaAsa.Data.Models;
 using CasaAsa.Data.Repository;
@@ -26,6 +27,7 @@ namespace CasaAsa.API.Extensions
         public static IServiceCollection AddComponents(this IServiceCollection services)
         {
             services.AddScoped<IAdminComponent, AdminComponent>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             return services;
         }

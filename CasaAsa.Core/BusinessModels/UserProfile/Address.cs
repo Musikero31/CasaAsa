@@ -21,7 +21,11 @@
         public required string City { get; set; }
         public required string State { get; set; }
         public required string Postcode { get; set; }
+        public bool IsDefaultAddress { get; set; } = false;
+
         public required string ContactPerson { get; set; }
         public required string ContactNumber { get; set; }
+        public bool ContactIsSameAsUser { get; set; } = false;
+
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace CasaAsa.Core.BusinessModels
+﻿using CasaAsa.Core.Common;
+
+namespace CasaAsa.Core.BusinessModels
 {
-    public class Menu
+    public class Menu : AuditEntity
     {
         public int MenuID { get; set; }
         public string Name { get; set; }

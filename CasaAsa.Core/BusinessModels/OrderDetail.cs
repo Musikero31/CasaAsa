@@ -1,6 +1,8 @@
-﻿namespace CasaAsa.Core.BusinessModels
+﻿using CasaAsa.Core.Common;
+
+namespace CasaAsa.Core.BusinessModels
 {
-    public class OrderDetail
+    public class OrderDetail : AuditEntity
     {
         public int OrderDetailId { get; set; }
         public int OrderId { get; set; }
