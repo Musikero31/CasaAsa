@@ -19,7 +19,7 @@ namespace CasaAsa.API.Extensions
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
-            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+            services.AddSingleton(typeof(IRepository<>), typeof(GenericRepository<>));
 
             return services;
         }
