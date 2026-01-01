@@ -10,6 +10,7 @@ namespace CasaAsa.Core.BusinessModels.UserProfile
         public string FullName => $"{FirstName} {LastName}";
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public string Password { get; set; }
 
         public List<Address> Addresses { get; set; }
     }

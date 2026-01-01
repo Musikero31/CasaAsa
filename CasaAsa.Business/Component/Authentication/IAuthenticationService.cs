@@ -4,7 +4,7 @@ namespace CasaAsa.Business.Component.Authentication
 {
     public interface IAuthenticationService
     {
-        Task<AuthenticationResult> LoginAsync(Login request);
+        Task<AuthenticationResult> LoginAsync(string username, string password);
         Task<AuthenticationResult> RegisterAsync(RegisterRequest request);
     }
 }

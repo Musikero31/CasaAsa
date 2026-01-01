@@ -7,7 +7,7 @@ using CasaAsa.Data.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace CasaAsa.API.Extensions
+namespace CasaAsa.API.Configuration
 {
     public static class ServiceCollectionExtensions
     {

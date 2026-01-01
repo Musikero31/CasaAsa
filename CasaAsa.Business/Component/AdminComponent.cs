@@ -2,18 +2,23 @@
 using CoreModel = CasaAsa.Core.BusinessModels;
 using AutoMapper;
 using CasaAsa.Data.Repository;
+using CasaAsa.Core.BusinessModels.UserProfile;
 
 namespace CasaAsa.Business.Component
 {
     public class AdminComponent : IAdminComponent
     {
         private readonly IRepository<DataModel.LockOrder> _lockRepository;
+        private readonly IRepository<DataModel.ApplicationUser> _userRepository;
         private readonly IMapper _mapper;
 
-        public AdminComponent(IRepository<DataModel.LockOrder> lockRepository, IMapper mapper)
+        public AdminComponent(IRepository<DataModel.LockOrder> lockRepository,
+                              IMapper mapper,
+                              IRepository<DataModel.ApplicationUser> userRepository)
         {
             _lockRepository = lockRepository;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         public async Task<CoreModel.LockOrder> GetLatestLockOrder()

@@ -39,7 +39,6 @@ namespace CasaAsa.Business.Component.Authentication
                 Email = request.Email,
                 UserName = request.Email,
                 //DisplayName = request.DisplayName
-
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
@@ -66,9 +65,9 @@ namespace CasaAsa.Business.Component.Authentication
             };
         }
 
-        public async Task<AuthenticationResult> LoginAsync(Login request)
+        public async Task<AuthenticationResult> LoginAsync(string username, string password)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.FindByEmailAsync(username);
             if (user == null)
             {
                 return new AuthenticationResult
@@ -78,7 +77,7 @@ namespace CasaAsa.Business.Component.Authentication
                 };
             }
 
-            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: false);
             if (!signInResult.Succeeded)
             {
                 return new AuthenticationResult

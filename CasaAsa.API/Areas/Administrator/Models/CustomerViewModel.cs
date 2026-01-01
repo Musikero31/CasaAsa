@@ -10,9 +10,6 @@
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
 
-        public required string ContactPerson { get; set; }
-        public required string ContactNumber { get; set; }
-
         public List<AddressViewModel> Addresses { get; set; }
     }
 }
