@@ -1,7 +1,7 @@
 ﻿using CasaAsa.Data.Models;
 using CasaAsa.Data.Repository;
 
-namespace CasaAsa.Business.Component
+namespace CasaAsa.Business.Component.Menu
 {
     public class MenuComponent
     {

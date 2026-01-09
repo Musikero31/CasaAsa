@@ -1,6 +1,6 @@
 ﻿using CasaAsa.Data.Models;
 
-namespace CasaAsa.Business.Component.Authentication
+namespace CasaAsa.Business.Component.Administration.Authentication
 {
     public interface IJwtTokenService
     {

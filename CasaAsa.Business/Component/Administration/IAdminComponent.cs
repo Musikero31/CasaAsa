@@ -1,6 +1,6 @@
 ﻿using CasaAsa.Core.BusinessModels;
 
-namespace CasaAsa.Business.Component
+namespace CasaAsa.Business.Component.Administration
 {
     public interface IAdminComponent
     {
