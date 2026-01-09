@@ -18,7 +18,6 @@ namespace CasaAsa.Business.Component.Authentication
 
         public Task<string> CreateTokenAsync(ApplicationUser user, IList<string> roles)
         {
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
@@ -31,13 +30,14 @@ namespace CasaAsa.Business.Component.Authentication
                 claims.Add(new Claim(ClaimTypes.Role, r));
             }
 
-            var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
+            var signInKey = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
+            var credentials = new SigningCredentials(new SymmetricSecurityKey(signInKey), SecurityAlgorithms.HmacSha512);
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(6),
+                expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: credentials
             );
 

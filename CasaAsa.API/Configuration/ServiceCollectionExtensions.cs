@@ -2,9 +2,7 @@
 using CasaAsa.Business.Component.Authentication;
 using CasaAsa.Core.Abstraction;
 using CasaAsa.Data.Database;
-using CasaAsa.Data.Models;
 using CasaAsa.Data.Repository;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CasaAsa.API.Configuration
@@ -19,15 +17,16 @@ namespace CasaAsa.API.Configuration
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
-            services.AddSingleton(typeof(IRepository<>), typeof(GenericRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
             return services;
         }
 
-        public static IServiceCollection AddComponents(this IServiceCollection services)
+        public static IServiceCollection AddBusinessComponents(this IServiceCollection services)
         {
             services.AddScoped<IAdminComponent, AdminComponent>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<IAddressComponent, AddressComponent>();
 
             return services;
         }

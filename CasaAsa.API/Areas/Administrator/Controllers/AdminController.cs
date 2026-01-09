@@ -1,36 +1,40 @@
-﻿using CasaAsa.API.Areas.Administrator.Models;
+﻿using AutoMapper;
+using CasaAsa.API.Areas.Administrator.Models;
 using CasaAsa.Business.Component;
 using CasaAsa.Business.Component.Authentication;
 using CasaAsa.Core.BusinessModels.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CasaAsa.API.Areas.Administrator.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AdminController : ControllerBase
     {
         private readonly IAuthenticationService _authService;
         private readonly IAdminComponent _adminComponent;
+        private readonly IMapper _mapper;
 
-        public AdminController(IAuthenticationService authService, IAdminComponent adminComponent)
+        public AdminController(IAuthenticationService authService,
+                               IAdminComponent adminComponent,
+                               IMapper mapper)
         {
             _authService = authService;
             _adminComponent = adminComponent;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetLatestLockOrderDate()
         {
-            return Ok(await _adminComponent.GetLatestLockOrder());
+            return Ok(await _adminComponent.GetLatestLockOrderAsync());
         }
 
         [HttpPost]
         public async Task<IActionResult> SetNewLockOrderDate([FromBody] DateOnly newLockOrderDate)
         {
-            await _adminComponent.CreateNewLockOrderDate(newLockOrderDate);
+            await _adminComponent.CreateNewLockOrderDateAsync(newLockOrderDate);
 
             return Ok();
         }
@@ -39,9 +43,18 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] CustomerViewModel model)
         {
-            var result = await _authService.RegisterAsync(new RegisterRequest());
+            try
+            {
+                var register = _mapper.Map<RegisterRequest>(model);
+                var result = await _adminComponent.RegisterAsync(register);
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         [HttpPost]

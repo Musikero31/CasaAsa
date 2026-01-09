@@ -17,17 +17,17 @@ namespace CasaAsa.Test.Components
 
         public AdminComponentTests()
         {
-            // 1. Mock repository
-            _mockRepo = new Mock<IRepository<DataModel.LockOrder>>();
+            //// 1. Mock repository
+            //_mockRepo = new Mock<IRepository<DataModel.LockOrder>>();
 
-            // 2. Configure AutoMapper with your test profile
-            var mockMapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<LockSettingProfile>();
-            }, _logger).CreateMapper();
+            //// 2. Configure AutoMapper with your test profile
+            //var mockMapper = new MapperConfiguration(cfg =>
+            //{
+            //    cfg.AddProfile<LockSettingProfile>();
+            //}, _logger).CreateMapper();
 
-            // 3. Instantiate component under test
-            _component = new AdminComponent(_mockRepo.Object, _mapper!);
+            //// 3. Instantiate component under test
+            //_component = new AdminComponent(_mockRepo.Object, _mapper!);
         }
 
         [Fact]

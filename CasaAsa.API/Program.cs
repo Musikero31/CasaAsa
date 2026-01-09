@@ -1,4 +1,5 @@
 using CasaAsa.API.Configuration;
+using CasaAsa.API.Configuration.Profiles;
 using CasaAsa.Business.Profiles;
 using CasaAsa.Data.Database;
 using CasaAsa.Data.Models;
@@ -57,7 +58,7 @@ builder.Services.AddAutoMapper(x =>
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddComponents();
+builder.Services.AddBusinessComponents();
 
 builder.Services.AddControllers();
 

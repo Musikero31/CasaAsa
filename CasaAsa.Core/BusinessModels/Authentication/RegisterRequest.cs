@@ -1,4 +1,6 @@
-﻿namespace CasaAsa.Core.BusinessModels.Authentication
+﻿using CasaAsa.Core.BusinessModels.UserProfile;
+
+namespace CasaAsa.Core.BusinessModels.Authentication
 {
     public class RegisterRequest
     {
@@ -8,5 +10,6 @@
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
 
+        public List<Address> Addresses { get; set; }
     }
 }

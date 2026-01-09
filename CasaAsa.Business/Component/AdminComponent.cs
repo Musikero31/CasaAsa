@@ -2,26 +2,30 @@
 using CoreModel = CasaAsa.Core.BusinessModels;
 using AutoMapper;
 using CasaAsa.Data.Repository;
-using CasaAsa.Core.BusinessModels.UserProfile;
+using CasaAsa.Core.BusinessModels.Authentication;
+using CasaAsa.Business.Component.Authentication;
 
 namespace CasaAsa.Business.Component
 {
     public class AdminComponent : IAdminComponent
     {
         private readonly IRepository<DataModel.LockOrder> _lockRepository;
-        private readonly IRepository<DataModel.ApplicationUser> _userRepository;
         private readonly IMapper _mapper;
+        private readonly IAuthenticationService _authService;
+        private readonly IAddressComponent _addressComponent;
 
         public AdminComponent(IRepository<DataModel.LockOrder> lockRepository,
                               IMapper mapper,
-                              IRepository<DataModel.ApplicationUser> userRepository)
+                              IAuthenticationService authService,
+                              IAddressComponent addressComponent)
         {
             _lockRepository = lockRepository;
             _mapper = mapper;
-            _userRepository = userRepository;
+            _authService = authService;
+            _addressComponent = addressComponent;
         }
 
-        public async Task<CoreModel.LockOrder> GetLatestLockOrder()
+        public async Task<CoreModel.LockOrder> GetLatestLockOrderAsync()
         {
             var data = await _lockRepository.GetAllAsync();
 
@@ -30,7 +34,7 @@ namespace CasaAsa.Business.Component
             return _mapper.Map<CoreModel.LockOrder>(result);
         }
 
-        public async Task CreateNewLockOrderDate(DateOnly newDate)
+        public async Task CreateNewLockOrderDateAsync(DateOnly newDate)
         {
             var data = await _lockRepository.GetAllAsync();
 
@@ -49,6 +53,24 @@ namespace CasaAsa.Business.Component
             });
 
             await _lockRepository.SaveChangesAsync();
+        }
+
+        public async Task<AuthenticationResult> RegisterAsync(RegisterRequest register)
+        {
+            var result = await _authService.RegisterUserAsync(register);
+
+            foreach (var address in register.Addresses)
+            {
+                if (address.ContactIsSameAsUser)
+                {
+                    address.ContactPerson = register.FirstName + " " + register.LastName;
+                    address.ContactNumber = register.PhoneNumber;
+                }
+
+                await _addressComponent.CreateAddressAsync(address, result.TokenResponse.UserId);                
+            }
+
+            return result;
         }
     }
 }
