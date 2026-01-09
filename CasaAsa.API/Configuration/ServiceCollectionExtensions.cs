@@ -1,5 +1,5 @@
-﻿using CasaAsa.Business.Component;
-using CasaAsa.Business.Component.Authentication;
+﻿using CasaAsa.Business.Component.Administration;
+using CasaAsa.Business.Component.Administration.Authentication;
 using CasaAsa.Core.Abstraction;
 using CasaAsa.Data.Database;
 using CasaAsa.Data.Repository;

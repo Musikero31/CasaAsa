@@ -1,6 +1,6 @@
 ﻿using CasaAsa.Core.BusinessModels.Authentication;
 
-namespace CasaAsa.Business.Component.Authentication
+namespace CasaAsa.Business.Component.Administration.Authentication
 {
     public interface IAuthenticationService
     {

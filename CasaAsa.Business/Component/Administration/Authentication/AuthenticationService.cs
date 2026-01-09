@@ -3,7 +3,7 @@ using CasaAsa.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Data;
 
-namespace CasaAsa.Business.Component.Authentication
+namespace CasaAsa.Business.Component.Administration.Authentication
 {
     public class AuthenticationService : IAuthenticationService
     {

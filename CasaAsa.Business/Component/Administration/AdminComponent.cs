@@ -3,9 +3,9 @@ using CoreModel = CasaAsa.Core.BusinessModels;
 using AutoMapper;
 using CasaAsa.Data.Repository;
 using CasaAsa.Core.BusinessModels.Authentication;
-using CasaAsa.Business.Component.Authentication;
+using CasaAsa.Business.Component.Administration.Authentication;
 
-namespace CasaAsa.Business.Component
+namespace CasaAsa.Business.Component.Administration
 {
     public class AdminComponent : IAdminComponent
     {

@@ -3,7 +3,7 @@ using CasaAsa.Data.Repository;
 using CoreModel = CasaAsa.Core.BusinessModels.UserProfile;
 using DataModel = CasaAsa.Data.Models;
 
-namespace CasaAsa.Business.Component
+namespace CasaAsa.Business.Component.Administration
 {
     public class AddressComponent : IAddressComponent
     {

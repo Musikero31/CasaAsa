@@ -1,7 +1,7 @@
 ﻿using CasaAsa.Core.BusinessModels;
 using CasaAsa.Core.BusinessModels.Authentication;
 
-namespace CasaAsa.Business.Component
+namespace CasaAsa.Business.Component.Administration
 {
     public interface IAdminComponent
     {

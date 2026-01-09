@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CasaAsa.API.Areas.Administrator.Models;
-using CasaAsa.Business.Component;
-using CasaAsa.Business.Component.Authentication;
+using CasaAsa.Business.Component.Administration;
+using CasaAsa.Business.Component.Administration.Authentication;
 using CasaAsa.Core.BusinessModels.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,12 +26,14 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetLatestLockOrderDate()
         {
             return Ok(await _adminComponent.GetLatestLockOrderAsync());
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SetNewLockOrderDate([FromBody] DateOnly newLockOrderDate)
         {
             await _adminComponent.CreateNewLockOrderDateAsync(newLockOrderDate);
@@ -43,18 +45,10 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] CustomerViewModel model)
         {
-            try
-            {
-                var register = _mapper.Map<RegisterRequest>(model);
-                var result = await _adminComponent.RegisterAsync(register);
+            var register = _mapper.Map<RegisterRequest>(model);
+            var result = await _adminComponent.RegisterAsync(register);
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            return Ok(result);
         }
 
         [HttpPost]
