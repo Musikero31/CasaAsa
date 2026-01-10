@@ -1,8 +1,9 @@
 ﻿using CasaAsa.Core.BusinessModels.Authentication;
 using CasaAsa.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Data;
 
-namespace CasaAsa.Business.Component.Authentication
+namespace CasaAsa.Business.Component.Administration.Authentication
 {
     public class AuthenticationService : IAuthenticationService
     {
@@ -22,7 +23,7 @@ namespace CasaAsa.Business.Component.Authentication
             _jwtTokenService = jwtTokenService;
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(RegisterRequest request)
+        public async Task<AuthenticationResult> RegisterUserAsync(RegisterRequest request)
         {
             var existing = await _userManager.FindByEmailAsync(request.Email);
             if (existing != null)
@@ -38,8 +39,9 @@ namespace CasaAsa.Business.Component.Authentication
             {
                 Email = request.Email,
                 UserName = request.Email,
-                //DisplayName = request.DisplayName
-
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                PhoneNumber = request.PhoneNumber,
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
@@ -53,22 +55,36 @@ namespace CasaAsa.Business.Component.Authentication
             }
 
             // Optionally assign default role
-            if (await _roleManager.RoleExistsAsync("User"))
+            if (await _roleManager.RoleExistsAsync("Customer"))
             {
-                await _userManager.AddToRoleAsync(user, "User");
+                await _userManager.AddToRoleAsync(user, "Customer");
             }
 
-            //return (true, Array.Empty<string>());
+            var roles = await _userManager.GetRolesAsync(user);
+
+            // Set token.
+            var token = await _jwtTokenService.CreateTokenAsync(user, roles);
+
+            var tokenResponse = new AuthenticationToken
+            {
+                Token = token,
+                UserId = user.Id,
+                Email = user.Email ?? "",
+                Roles = roles.ToList()
+            };
+
             return new AuthenticationResult
             {
+                TokenResponse = tokenResponse,
                 Succeeded = true,
-                Errors = []
+                Errors = [],
+                FullName = user.FullName,
             };
         }
 
-        public async Task<AuthenticationResult> LoginAsync(Login request)
+        public async Task<AuthenticationResult> LoginAsync(string username, string password)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.FindByEmailAsync(username);
             if (user == null)
             {
                 return new AuthenticationResult
@@ -78,7 +94,7 @@ namespace CasaAsa.Business.Component.Authentication
                 };
             }
 
-            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: false);
             if (!signInResult.Succeeded)
             {
                 return new AuthenticationResult
@@ -103,7 +119,8 @@ namespace CasaAsa.Business.Component.Authentication
             {
                 Succeeded = true,
                 TokenResponse = response,
-                Errors = []
+                Errors = [],
+                FullName = user.FullName,
             };
         }
     }

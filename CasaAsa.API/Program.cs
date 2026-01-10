@@ -1,4 +1,5 @@
-using CasaAsa.API.Extensions;
+using CasaAsa.API.Configuration;
+using CasaAsa.API.Configuration.Profiles;
 using CasaAsa.Business.Profiles;
 using CasaAsa.Data.Database;
 using CasaAsa.Data.Models;
@@ -47,8 +48,18 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAutoMapper(x => x.AddMaps(typeof(EmptyProfileMarker).Assembly));
-builder.Services.AddComponents();
+builder.Services.AddAutoMapper(x =>
+{
+    // Move this to the secrets
+    x.LicenseKey = builder.Configuration["AutomapperLicense"];
+    x.AddMaps(typeof(EmptyProfileMarker).Assembly);
+    x.AddMaps(typeof(AdminViewModelProfiles).Assembly);
+});
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddBusinessComponents();
+
 builder.Services.AddControllers();
 
 builder.Services.AddSwaggerGen(c =>

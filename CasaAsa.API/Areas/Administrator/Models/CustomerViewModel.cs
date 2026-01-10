@@ -1,10 +1,8 @@
-﻿using CasaAsa.Core.Common;
-
-namespace CasaAsa.Core.BusinessModels.UserProfile
+﻿namespace CasaAsa.API.Areas.Administrator.Models
 {
-    public class Customer : AuditEntity
+    public class CustomerViewModel
     {
-        public Guid UserId { get; set; }
+        public Guid UserId { get; set; } = default;
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string FullName => $"{FirstName} {LastName}";
@@ -12,6 +10,6 @@ namespace CasaAsa.Core.BusinessModels.UserProfile
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
 
-        public List<Address> Addresses { get; set; }
+        public List<AddressViewModel> Addresses { get; set; }
     }
 }
