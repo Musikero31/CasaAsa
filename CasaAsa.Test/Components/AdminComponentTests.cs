@@ -1,10 +1,9 @@
 using AutoMapper;
-using CasaAsa.Business.Component;
-using CasaAsa.Business.Profiles;
 using CasaAsa.Data.Repository;
 using DataModel = CasaAsa.Data.Models;
 using Moq;
 using Microsoft.Extensions.Logging;
+using CasaAsa.Business.Component.Administration;
 
 namespace CasaAsa.Test.Components
 {
