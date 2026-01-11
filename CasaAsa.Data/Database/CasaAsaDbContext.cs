@@ -1,4 +1,5 @@
 ﻿using CasaAsa.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,25 +24,7 @@ namespace CasaAsa.Data.Database
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
-            // custom configs here
-
-            var adminRoleId = Guid.Parse("b52d7e53-5cdc-4dd5-8e45-19fb77e9a1e0");
-            var customerRoleId = Guid.Parse("8db644e0-6c88-41e5-8be6-f28f3c455447");
-
-            builder.Entity<ApplicationRole>().HasData(
-                new ApplicationRole
-                {
-                    Id = adminRoleId,
-                    Name = "Administrator",
-                    NormalizedName = "Administrator",
-                },
-                new ApplicationRole
-                {
-                    Id = customerRoleId,
-                    Name = "Customer",
-                    NormalizedName = "Customer"
-                });
+            base.OnModelCreating(builder);            
         }
     }
 }

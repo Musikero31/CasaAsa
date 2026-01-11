@@ -112,20 +112,6 @@ namespace CasaAsa.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("b52d7e53-5cdc-4dd5-8e45-19fb77e9a1e0"),
-                            Name = "Administrator",
-                            NormalizedName = "Administrator"
-                        },
-                        new
-                        {
-                            Id = new Guid("8db644e0-6c88-41e5-8be6-f28f3c455447"),
-                            Name = "Customer",
-                            NormalizedName = "Customer"
-                        });
                 });
 
             modelBuilder.Entity("CasaAsa.Data.Models.ApplicationSetting", b =>

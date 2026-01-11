@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CasaAsa.Data.Migrations
 {
     [DbContext(typeof(CasaAsaDbContext))]
-    [Migration("20251128192051_Initial-Commit")]
-    partial class InitialCommit
+    [Migration("20260113045445_INITIAL-COMMIT")]
+    partial class INITIALCOMMIT
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,6 +61,9 @@ namespace CasaAsa.Data.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDefaultAddress")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Postcode")
                         .IsRequired()
@@ -112,20 +115,6 @@ namespace CasaAsa.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("b52d7e53-5cdc-4dd5-8e45-19fb77e9a1e0"),
-                            Name = "Administrator",
-                            NormalizedName = "Administrator"
-                        },
-                        new
-                        {
-                            Id = new Guid("8db644e0-6c88-41e5-8be6-f28f3c455447"),
-                            Name = "Customer",
-                            NormalizedName = "Customer"
-                        });
                 });
 
             modelBuilder.Entity("CasaAsa.Data.Models.ApplicationSetting", b =>

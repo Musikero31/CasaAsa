@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace CasaAsa.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCommit : Migration
+    public partial class INITIALCOMMIT : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -145,6 +143,7 @@ namespace CasaAsa.Data.Migrations
                     Postcode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContactPerson = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDefaultAddress = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ActiveStatus = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -367,15 +366,6 @@ namespace CasaAsa.Data.Migrations
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { new Guid("8db644e0-6c88-41e5-8be6-f28f3c455447"), null, "Customer", "Customer" },
-                    { new Guid("b52d7e53-5cdc-4dd5-8e45-19fb77e9a1e0"), null, "Administrator", "Administrator" }
                 });
 
             migrationBuilder.CreateIndex(
