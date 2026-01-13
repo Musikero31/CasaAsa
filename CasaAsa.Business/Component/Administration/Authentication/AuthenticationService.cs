@@ -54,7 +54,6 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 };
             }
 
-            // Optionally assign default role
             if (await _roleManager.RoleExistsAsync("Customer"))
             {
                 await _userManager.AddToRoleAsync(user, "Customer");
