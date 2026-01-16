@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,6 +56,18 @@ builder.Services.AddAutoMapper(x =>
     x.AddMaps(typeof(EmptyProfileMarker).Assembly);
     x.AddMaps(typeof(AdminViewModelProfiles).Assembly);
 });
+
+builder.Host.UseSerilog((context, services, configuration) =>
+{
+    configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .Enrich.WithEnvironmentName()
+        .Enrich.WithThreadId()
+        .WriteTo.Console();
+});
+
 
 builder.Services.AddHttpContextAccessor();
 
@@ -113,5 +126,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 await SeederConfiguration.SeedDefaultsAsync(app.Services);
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.Run();
