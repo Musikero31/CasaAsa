@@ -1,7 +1,12 @@
-﻿namespace CasaAsa.Data.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CasaAsa.Data.Models
 {
     public class ApplicationSetting : IEntityDefault
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string? Category { get; set; }
         public string? Code { get; set; }

@@ -59,5 +59,11 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Confirmation()
+        {
+            return Ok();
+        }
     }
 }

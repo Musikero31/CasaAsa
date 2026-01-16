@@ -1,4 +1,5 @@
-﻿using CasaAsa.Data.Models;
+﻿using CasaAsa.Business.Component;
+using CasaAsa.Data.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace CasaAsa.API.Configuration
