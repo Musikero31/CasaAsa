@@ -30,18 +30,21 @@ namespace CasaAsa.Data.Database
                 new ApplicationSetting
                 {
                     Id = 1,
+                    Category = "Templates",
                     Code = "Confirm-Email",
                     Value = "Html/ConfirmUser.html"
                 },
                 new ApplicationSetting
                 {
                     Id = 2,
+                    Category = "Templates",
                     Code = "Reset-Password",
                     Value = "Html/ResetPassword.html"
                 },
                 new ApplicationSetting
                 {
                     Id = 3,
+                    Category = "Templates",
                     Code = "Customer-Receipt",
                     Value = "Html/CustomerReceipt.html"
                 });

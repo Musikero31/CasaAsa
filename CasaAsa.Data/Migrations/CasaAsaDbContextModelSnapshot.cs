@@ -155,6 +155,7 @@ namespace CasaAsa.Data.Migrations
                         {
                             Id = 1,
                             ActiveStatus = false,
+                            Category = "Templates",
                             Code = "Confirm-Email",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -164,6 +165,7 @@ namespace CasaAsa.Data.Migrations
                         {
                             Id = 2,
                             ActiveStatus = false,
+                            Category = "Templates",
                             Code = "Reset-Password",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -173,6 +175,7 @@ namespace CasaAsa.Data.Migrations
                         {
                             Id = 3,
                             ActiveStatus = false,
+                            Category = "Templates",
                             Code = "Customer-Receipt",
                             CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
