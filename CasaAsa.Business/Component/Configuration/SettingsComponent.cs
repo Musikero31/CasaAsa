@@ -1,10 +1,9 @@
 ﻿using CasaAsa.Data.Models;
 using CasaAsa.Data.Repository;
-using System.Text;
 
-namespace CasaAsa.Business.Component
+namespace CasaAsa.Business.Component.Configuration
 {
-    public class SettingsComponent
+    public class SettingsComponent : ISettingsComponent
     {
         private readonly IRepository<ApplicationSetting> _repository;
 

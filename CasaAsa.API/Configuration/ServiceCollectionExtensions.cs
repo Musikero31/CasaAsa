@@ -1,8 +1,10 @@
 ﻿using CasaAsa.Business.Component.Administration;
 using CasaAsa.Business.Component.Administration.Authentication;
+using CasaAsa.Business.Component.Configuration;
 using CasaAsa.Core.Abstraction;
 using CasaAsa.Data.Database;
 using CasaAsa.Data.Repository;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace CasaAsa.API.Configuration
@@ -30,5 +32,14 @@ namespace CasaAsa.API.Configuration
 
             return services;
         }
+
+        public static IServiceCollection AddConfigurationsComponents(this IServiceCollection services)
+        {
+            services.AddScoped<IHtmlParser, HtmlParser>();
+            services.AddScoped<ISettingsComponent, SettingsComponent>();
+
+            return services;
+        }
+
     }
 }

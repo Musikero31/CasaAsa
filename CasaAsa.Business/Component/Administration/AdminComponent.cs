@@ -70,6 +70,8 @@ namespace CasaAsa.Business.Component.Administration
                 await _addressComponent.CreateAddressAsync(address, result.TokenResponse.UserId);                
             }
 
+            // Send the confirm user email.
+
             return result;
         }
     }
