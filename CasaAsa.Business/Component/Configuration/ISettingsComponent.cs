@@ -2,6 +2,6 @@
 {
     public interface ISettingsComponent
     {
-        Task<string> RetrieveApplicationSettingAsync(string code);
+        Task<string> RetrieveApplicationSettingValueAsync(string code);
     }
 }

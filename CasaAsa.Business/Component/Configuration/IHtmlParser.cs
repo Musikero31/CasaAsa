@@ -1,7 +1,8 @@
-﻿namespace CasaAsa.Business.Component.Configuration
+﻿
+namespace CasaAsa.Business.Component.Configuration
 {
     public interface IHtmlParser
     {
-        string ParseByReportType(string reportType);
+        Task<string> ParseByReportType(string reportType);
     }
 }

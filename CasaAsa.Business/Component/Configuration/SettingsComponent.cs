@@ -12,7 +12,7 @@ namespace CasaAsa.Business.Component.Configuration
             _repository = repository;
         }
 
-        public async Task<string> RetrieveApplicationSettingAsync(string code)
+        public async Task<string> RetrieveApplicationSettingValueAsync(string code)
         {
             var result = await _repository.FindAsync(x => x.Code == code && x.ActiveStatus);
 

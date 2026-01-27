@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CasaAsa.Business.Component.Configuration;
+using CasaAsa.Business.Constants;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CasaAsa.API.Areas.Test.Controllers
 {
@@ -6,22 +8,35 @@ namespace CasaAsa.API.Areas.Test.Controllers
     [ApiController]
     public class ReportTestController : ControllerBase
     {
+        private readonly IHtmlParser _parser;
+
+        public ReportTestController(IHtmlParser parser)
+        {
+            _parser = parser;
+        }
+
         [HttpGet]
         public async Task<IActionResult> ConfirmUserReport(int id)
         {
-            return Ok();
+            var result = await _parser.ParseByReportType(ApplicationSettingsKeys.CONFIRM_EMAIL_TEMPLATE);
+
+            return Ok(result);
         }
 
         [HttpGet]
         public async Task<IActionResult> ResetPasswordReport(int id)
         {
-            return Ok();
+            var result = await _parser.ParseByReportType(ApplicationSettingsKeys.RESET_PASSWORD_TEMPLATE);
+
+            return Ok(result);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetLatestReceipt(int id)
         {
-            return Ok();
+            var result = await _parser.ParseByReportType(ApplicationSettingsKeys.CUSTOMER_RECEIPT_TEMPLATE);
+
+            return Ok(result);
         }
     }
 }

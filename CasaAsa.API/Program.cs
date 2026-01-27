@@ -73,6 +73,8 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddBusinessComponents();
 
+builder.Services.AddConfigurationsComponents();
+
 builder.Services.AddControllers();
 
 builder.Services.AddSwaggerGen(c =>
