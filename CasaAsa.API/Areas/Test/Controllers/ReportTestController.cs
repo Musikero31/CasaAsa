@@ -11,10 +11,12 @@ namespace CasaAsa.API.Areas.Test.Controllers
     public class ReportTestController : ControllerBase
     {
         private readonly IHtmlParser _parser;
+        private readonly IMailComponent _mailComponent;
 
-        public ReportTestController(IHtmlParser parser)
+        public ReportTestController(IHtmlParser parser, IMailComponent mailComponent)
         {
             _parser = parser;
+            _mailComponent = mailComponent;
         }
 
         [HttpGet]
@@ -27,11 +29,24 @@ namespace CasaAsa.API.Areas.Test.Controllers
                 OtherParameters = new Dictionary<string, string>
                 {
                     { "ExpirationTime", "3 days" },
-                    { "ConfirmationLink", "MyLink" }
+                    { "ConfirmationLink", "#" }
                 }
             };
 
             var result = await _parser.ParseByReportTypeAsync(templateFields, ApplicationSettingsKeys.CONFIRM_EMAIL_TEMPLATE);
+
+            // Send the mail here
+            var mail = new Mail
+            {
+                FromEmail = "casa.asa@sarapfoods.com",
+                SenderName = "Casa Asa Admin",
+                ReceiverName = templateFields.FullName,
+                ToEmail = templateFields.Username,
+                Subject = "Confirm User",
+                Body = result
+            };
+
+            _mailComponent.SendMail(mail);
 
             return Ok(result);
         }
