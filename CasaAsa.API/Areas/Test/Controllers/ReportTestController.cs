@@ -1,5 +1,7 @@
 ﻿using CasaAsa.Business.Component.Configuration;
 using CasaAsa.Business.Constants;
+using CasaAsa.Core.Configuration;
+using CasaAsa.Core.Configuration.Template;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CasaAsa.API.Areas.Test.Controllers
@@ -18,7 +20,18 @@ namespace CasaAsa.API.Areas.Test.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfirmUserReport(int id)
         {
-            var result = await _parser.ParseByReportType(ApplicationSettingsKeys.CONFIRM_EMAIL_TEMPLATE);
+            var templateFields = new TemplateFields
+            {
+                FullName = "Ryan Estandarte",
+                Username = "ryan.aimel.estandarte@gmail.com",
+                OtherParameters = new Dictionary<string, string>
+                {
+                    { "ExpirationTime", "3 days" },
+                    { "ConfirmationLink", "MyLink" }
+                }
+            };
+
+            var result = await _parser.ParseByReportTypeAsync(templateFields, ApplicationSettingsKeys.CONFIRM_EMAIL_TEMPLATE);
 
             return Ok(result);
         }
@@ -26,7 +39,13 @@ namespace CasaAsa.API.Areas.Test.Controllers
         [HttpGet]
         public async Task<IActionResult> ResetPasswordReport(int id)
         {
-            var result = await _parser.ParseByReportType(ApplicationSettingsKeys.RESET_PASSWORD_TEMPLATE);
+            var templateFields = new TemplateFields
+            {
+                FullName = "Ryan Estandarte",
+                Username = "ryan.aimel.estandarte@gmail.com"
+            };
+
+            var result = await _parser.ParseByReportTypeAsync(templateFields, ApplicationSettingsKeys.RESET_PASSWORD_TEMPLATE);
 
             return Ok(result);
         }
@@ -34,7 +53,13 @@ namespace CasaAsa.API.Areas.Test.Controllers
         [HttpGet]
         public async Task<IActionResult> GetLatestReceipt(int id)
         {
-            var result = await _parser.ParseByReportType(ApplicationSettingsKeys.CUSTOMER_RECEIPT_TEMPLATE);
+            var templateFields = new TemplateFields
+            {
+                FullName = "Ryan Estandarte",
+                Username = "ryan.aimel.estandarte@gmail.com"
+            };
+
+            var result = await _parser.ParseByReportTypeAsync(templateFields, ApplicationSettingsKeys.CUSTOMER_RECEIPT_TEMPLATE);
 
             return Ok(result);
         }

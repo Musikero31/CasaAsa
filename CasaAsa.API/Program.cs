@@ -1,5 +1,6 @@
 using CasaAsa.API.Configuration;
 using CasaAsa.API.Configuration.Profiles;
+using CasaAsa.Business.Component.Configuration;
 using CasaAsa.Business.Profiles;
 using CasaAsa.Data.Database;
 using CasaAsa.Data.Models;
@@ -68,8 +69,14 @@ builder.Host.UseSerilog((context, services, configuration) =>
         .WriteTo.Console();
 });
 
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(24);
+});
 
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.Configure<MailConfiguration>(builder.Configuration.GetSection(MailConfiguration.SECTION_NAME));
 
 builder.Services.AddBusinessComponents();
 

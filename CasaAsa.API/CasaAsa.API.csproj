@@ -56,4 +56,13 @@
     <Folder Include="Areas\Test\Views\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Html\CustomerReceipt.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Html\ResetPassword.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

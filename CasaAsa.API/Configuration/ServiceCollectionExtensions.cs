@@ -37,6 +37,7 @@ namespace CasaAsa.API.Configuration
         {
             services.AddScoped<IHtmlParser, HtmlParser>();
             services.AddScoped<ISettingsComponent, SettingsComponent>();
+            services.AddScoped<IMailComponent, MailComponent>();
 
             return services;
         }
