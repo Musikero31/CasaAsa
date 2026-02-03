@@ -24,7 +24,36 @@ namespace CasaAsa.Data.Database
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);            
+            base.OnModelCreating(builder);
+
+            builder.Entity<ApplicationSetting>().HasData(
+                new ApplicationSetting
+                {
+                    Id = 1,
+                    Category = "Templates",
+                    Code = "Confirm-Email",
+                    Value = "Html/ConfirmUser.html",
+                    ActiveStatus = true,
+                    CreatedBy = Guid.Parse("c325b987-a6ce-4462-9116-f76922e7206c"),
+                },
+                new ApplicationSetting
+                {
+                    Id = 2,
+                    Category = "Templates",
+                    Code = "Reset-Password",
+                    Value = "Html/ResetPassword.html",
+                    ActiveStatus = true,
+                    CreatedBy = Guid.Parse("c325b987-a6ce-4462-9116-f76922e7206c"),
+                },
+                new ApplicationSetting
+                {
+                    Id = 3,
+                    Category = "Templates",
+                    Code = "Customer-Receipt",
+                    Value = "Html/CustomerReceipt.html",
+                    ActiveStatus = true,
+                    CreatedBy = Guid.Parse("c325b987-a6ce-4462-9116-f76922e7206c"),
+                });
         }
     }
 }

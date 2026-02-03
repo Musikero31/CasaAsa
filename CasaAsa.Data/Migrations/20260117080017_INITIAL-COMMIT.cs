@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace CasaAsa.Data.Migrations
 {
     /// <inheritdoc />
@@ -366,6 +368,16 @@ namespace CasaAsa.Data.Migrations
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "ApplicationSettings",
+                columns: new[] { "Id", "ActiveStatus", "Category", "Code", "CreatedBy", "CreatedDate", "UpdatedBy", "UpdatedDate", "Value" },
+                values: new object[,]
+                {
+                    { 1, false, "Templates", "Confirm-Email", new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Html/ConfirmUser.html" },
+                    { 2, false, "Templates", "Reset-Password", new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Html/ResetPassword.html" },
+                    { 3, false, "Templates", "Customer-Receipt", new Guid("00000000-0000-0000-0000-000000000000"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "Html/CustomerReceipt.html" }
                 });
 
             migrationBuilder.CreateIndex(

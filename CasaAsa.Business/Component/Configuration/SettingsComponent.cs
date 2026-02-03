@@ -1,0 +1,22 @@
+﻿using CasaAsa.Data.Models;
+using CasaAsa.Data.Repository;
+
+namespace CasaAsa.Business.Component.Configuration
+{
+    public class SettingsComponent : ISettingsComponent
+    {
+        private readonly IRepository<ApplicationSetting> _repository;
+
+        public SettingsComponent(IRepository<ApplicationSetting> repository)
+        {
+            _repository = repository;
+        }
+
+        public async Task<string> RetrieveApplicationSettingValueAsync(string code)
+        {
+            var result = await _repository.FindAsync(x => x.Code == code && x.ActiveStatus);
+
+            return result.FirstOrDefault()?.Value ?? string.Empty;
+        }
+    }
+}

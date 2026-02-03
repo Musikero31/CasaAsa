@@ -4,6 +4,7 @@ using CasaAsa.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CasaAsa.Data.Migrations
 {
     [DbContext(typeof(CasaAsaDbContext))]
-    partial class CasaAsaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260117080412_UPDATE-TEMPLATE-CATEGORIES-TO-ACTIVE")]
+    partial class UPDATETEMPLATECATEGORIESTOACTIVE
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,7 +160,7 @@ namespace CasaAsa.Data.Migrations
                             ActiveStatus = true,
                             Category = "Templates",
                             Code = "Confirm-Email",
-                            CreatedBy = new Guid("c325b987-a6ce-4462-9116-f76922e7206c"),
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Value = "Html/ConfirmUser.html"
                         },
@@ -167,7 +170,7 @@ namespace CasaAsa.Data.Migrations
                             ActiveStatus = true,
                             Category = "Templates",
                             Code = "Reset-Password",
-                            CreatedBy = new Guid("c325b987-a6ce-4462-9116-f76922e7206c"),
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Value = "Html/ResetPassword.html"
                         },
@@ -177,7 +180,7 @@ namespace CasaAsa.Data.Migrations
                             ActiveStatus = true,
                             Category = "Templates",
                             Code = "Customer-Receipt",
-                            CreatedBy = new Guid("c325b987-a6ce-4462-9116-f76922e7206c"),
+                            CreatedBy = new Guid("00000000-0000-0000-0000-000000000000"),
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Value = "Html/CustomerReceipt.html"
                         });

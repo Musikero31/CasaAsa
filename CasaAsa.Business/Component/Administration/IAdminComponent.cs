@@ -7,7 +7,6 @@ namespace CasaAsa.Business.Component.Administration
     {
         Task CreateNewLockOrderDateAsync(DateOnly newDate);
         Task<LockOrder> GetLatestLockOrderAsync();
-
         Task<AuthenticationResult> RegisterAsync(RegisterRequest register);
     }
 }

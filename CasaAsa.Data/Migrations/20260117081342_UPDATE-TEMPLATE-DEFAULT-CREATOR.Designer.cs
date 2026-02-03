@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CasaAsa.Data.Migrations
 {
     [DbContext(typeof(CasaAsaDbContext))]
-    [Migration("20260113045445_INITIAL-COMMIT")]
-    partial class INITIALCOMMIT
+    [Migration("20260117081342_UPDATE-TEMPLATE-DEFAULT-CREATOR")]
+    partial class UPDATETEMPLATEDEFAULTCREATOR
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -152,6 +152,38 @@ namespace CasaAsa.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ApplicationSettings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActiveStatus = true,
+                            Category = "Templates",
+                            Code = "Confirm-Email",
+                            CreatedBy = new Guid("c325b987-a6ce-4462-9116-f76922e7206c"),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Value = "Html/ConfirmUser.html"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActiveStatus = true,
+                            Category = "Templates",
+                            Code = "Reset-Password",
+                            CreatedBy = new Guid("c325b987-a6ce-4462-9116-f76922e7206c"),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Value = "Html/ResetPassword.html"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ActiveStatus = true,
+                            Category = "Templates",
+                            Code = "Customer-Receipt",
+                            CreatedBy = new Guid("c325b987-a6ce-4462-9116-f76922e7206c"),
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Value = "Html/CustomerReceipt.html"
+                        });
                 });
 
             modelBuilder.Entity("CasaAsa.Data.Models.ApplicationUser", b =>
