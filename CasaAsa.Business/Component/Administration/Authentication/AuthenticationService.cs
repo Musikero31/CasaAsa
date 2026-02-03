@@ -1,8 +1,10 @@
 ﻿using CasaAsa.Core.BusinessModels.Authentication;
 using CasaAsa.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System.Data;
+using System.Text;
 
 namespace CasaAsa.Business.Component.Administration.Authentication
 {
@@ -66,9 +68,11 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             // Set token.
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
             var tokenResponse = new AuthenticationToken
             {
-                Token = token,
+                Token = encodedToken,
                 UserId = user.Id,
                 Email = user.Email ?? ""
             };
@@ -133,12 +137,16 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 throw new ArgumentNullException("User not found");
             }
 
-            var result = await _userManager.ConfirmEmailAsync(user, token);
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+
+            var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
 
             if (!result.Succeeded)
             {
                 _logger.LogError("Confirmation error", result.Errors);                
             }
+
+            _logger.LogInformation($"User {user.UserName} is confirmed.");
 
             return result.Succeeded;
         }
