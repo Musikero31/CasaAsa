@@ -111,5 +111,57 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
             return Ok();
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPassword model)
+        {
+            var result = await _authService.ResetPassword(model.Username);
+
+            var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/api/Admin/NewPassword?userId={result.TokenResponse.UserId}&token={result.TokenResponse.Token}";
+
+            var mailParameters = new TemplateFields
+            {
+                FullName = result.FullName,
+                Username = result.TokenResponse.Email,
+                OtherParameters = new Dictionary<string, string>
+                {
+                    { "ExpirationTime", "24 hours" },
+                    { "ResetPasswordLink", resetPasswordLink }
+                }
+            };
+
+            var email = await _htmlParser.ParseByReportTypeAsync(mailParameters,
+                                                                 ApplicationSettingsKeys.RESET_PASSWORD_TEMPLATE);
+
+            // Send the mail here
+            var mail = new Mail
+            {
+                FromEmail = "casa.asa@sarapfoods.com",
+                SenderName = "Casa Asa Admin",
+                ReceiverName = result.FullName,
+                ToEmail = result.TokenResponse.Email,
+                Subject = "Confirm User",
+                Body = email
+            };
+
+            _mailComponent.SendMail(mail);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> NewPassword([FromBody] ResetPassword model)
+        {
+            var result = await _authService.ResetNewPassword(model.Username, model.ResetPasswordToken, model.NewPassword);
+
+            if (!result)
+            {
+                return BadRequest("Please ask the admin to assist you and request for a new one.");
+            }
+
+            return Ok();
+        }
     }
 }
