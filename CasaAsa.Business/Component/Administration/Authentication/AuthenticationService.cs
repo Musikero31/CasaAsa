@@ -130,12 +130,8 @@ namespace CasaAsa.Business.Component.Administration.Authentication
 
         public async Task<bool> ConfirmEmailAsync(Guid userId, string token)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-
-            if (user == null)
-            {
-                throw new ArgumentNullException("User not found");
-            }
+            var user = await _userManager.FindByIdAsync(userId.ToString())
+                       ?? throw new ArgumentNullException("User not found");
 
             var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
 
@@ -143,12 +139,60 @@ namespace CasaAsa.Business.Component.Administration.Authentication
 
             if (!result.Succeeded)
             {
-                _logger.LogError("Confirmation error", result.Errors);                
+                _logger.LogError("Confirmation error", result.Errors);
+
+                throw new ArgumentException("Confirmation errors", new Exception(string.Join("; ", result.Errors)));
             }
 
             _logger.LogInformation($"User {user.UserName} is confirmed.");
 
             return result.Succeeded;
+        }
+
+        public async Task<bool> ResetNewPassword(string username, string token, string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(username)
+                       ?? throw new ArgumentNullException("User not found");
+
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, newPassword);
+
+            if (!result.Succeeded)
+            {
+                _logger.LogError("Reset password error", result.Errors);
+
+                throw new ArgumentException("Reset password errors", new Exception(string.Join("; ", result.Errors)));
+            }
+
+            _logger.LogInformation($"User {user.UserName} is confirmed.");
+
+            return result.Succeeded;
+        }
+
+        public async Task<AuthenticationResult> ResetPassword(string username)
+        {
+            var user = await _userManager.FindByEmailAsync(username)
+                       ?? throw new ArgumentNullException("User not found");
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            var tokenResponse = new AuthenticationToken
+            {
+                Token = encodedToken,
+                UserId = user.Id,
+                Email = user.Email ?? ""
+            };
+
+            return new AuthenticationResult
+            {
+                TokenResponse = tokenResponse,
+                Succeeded = true,
+                Errors = [],
+                FullName = user.FullName,
+            };
         }
     }
 }
