@@ -114,9 +114,9 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPassword model)
+        public async Task<IActionResult> ResetPassword([FromBody] string username)
         {
-            var result = await _authService.ResetPassword(model.Username);
+            var result = await _authService.ResetPassword(username);
 
             var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/api/Admin/NewPassword?userId={result.TokenResponse.UserId}&token={result.TokenResponse.Token}";
 
