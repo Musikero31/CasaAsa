@@ -1,4 +1,4 @@
-﻿using CasaAsa.Core.Configuration.Template;
+﻿using CasaAsa.Core.Configuration;
 
 namespace CasaAsa.Business.Component.Configuration
 {

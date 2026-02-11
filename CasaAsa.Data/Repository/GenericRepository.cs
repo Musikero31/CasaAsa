@@ -1,8 +1,6 @@
 ﻿using CasaAsa.Core.Abstraction;
-using CasaAsa.Core.Common;
 using CasaAsa.Data.Database;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
 
 namespace CasaAsa.Data.Repository
@@ -47,7 +45,6 @@ namespace CasaAsa.Data.Repository
 
         public virtual async Task<int> SaveChangesAsync()
         {
-            ApplyAuditInfo();
             return await _context.SaveChangesAsync();
         }
 
@@ -55,31 +52,5 @@ namespace CasaAsa.Data.Repository
         {
             _dbSet.Update(entity);
         }
-
-        private void ApplyAuditInfo()
-        {
-            var entries = _context.ChangeTracker.Entries<AuditEntity>()
-            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
-
-            foreach (var entry in entries)
-            {
-                var now = DateTime.UtcNow;
-                var userId = _currentUser.UserId;
-
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Entity.CreatedDate = now;
-                    entry.Entity.CreatedBy = userId;
-                }
-
-                if (entry.State == EntityState.Modified)
-                {
-                    entry.Entity.UpdatedDate = now;
-                    entry.Entity.UpdatedBy = userId;
-                }
-            }
-        }
-
-
     }
 }
