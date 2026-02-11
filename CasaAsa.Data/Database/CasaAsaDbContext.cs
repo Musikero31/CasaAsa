@@ -1,5 +1,6 @@
-﻿using CasaAsa.Data.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using CasaAsa.Core.Abstraction;
+using CasaAsa.Core.Common;
+using CasaAsa.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,8 +8,13 @@ namespace CasaAsa.Data.Database
 {
     public class CasaAsaDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
-        public CasaAsaDbContext(DbContextOptions<CasaAsaDbContext> options)
-            : base(options) { }
+        private readonly ICurrentUserService _currentUser;
+
+        public CasaAsaDbContext(DbContextOptions<CasaAsaDbContext> options,
+                                ICurrentUserService currentUser) : base(options)
+        {
+            _currentUser = currentUser;
+        }
 
         // DbSets
         public DbSet<Address> Addresses { get; set; }
@@ -54,6 +60,37 @@ namespace CasaAsa.Data.Database
                     ActiveStatus = true,
                     CreatedBy = Guid.Parse("c325b987-a6ce-4462-9116-f76922e7206c"),
                 });
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ApplyAuditInfo();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void ApplyAuditInfo()
+        {
+            var now = DateTime.Now;
+            var userId = _currentUser.UserId;
+
+            foreach (var entry in ChangeTracker.Entries<AuditEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Modified:
+                        entry.Entity.CreatedDate = now;
+                        entry.Entity.CreatedBy = userId;
+                        break;
+                    case EntityState.Added:
+                        entry.Entity.UpdatedDate = now;
+                        entry.Entity.UpdatedBy = userId;
+
+                        // Prevent overwriting creation data
+                        entry.Property(x => x.CreatedBy).IsModified = false;
+                        entry.Property(x => x.CreatedDate).IsModified = false;
+                        break;
+                }
+            }
         }
     }
 }

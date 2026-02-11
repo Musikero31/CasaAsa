@@ -1,4 +1,4 @@
-﻿namespace CasaAsa.Core.Configuration.Template
+﻿namespace CasaAsa.Core.Configuration
 {
     public class TemplateFields
     {
