@@ -6,7 +6,6 @@ using CasaAsa.Business.Component.Configuration;
 using CasaAsa.Business.Constants;
 using CasaAsa.Core.BusinessModels.Authentication;
 using CasaAsa.Core.Configuration;
-using CasaAsa.Core.Configuration.Template;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,9 +43,9 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> SetNewLockOrderDate([FromBody] DateOnly newLockOrderDate)
+        public async Task<IActionResult> SetNewLockOrderDate([FromBody] OrderLock model)
         {
-            await _adminComponent.CreateNewLockOrderDateAsync(newLockOrderDate);
+            await _adminComponent.CreateNewLockOrderDateAsync(model.NewOrderLockDate);
 
             return Ok();
         }

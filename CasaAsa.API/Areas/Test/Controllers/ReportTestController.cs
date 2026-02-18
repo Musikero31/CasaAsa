@@ -1,7 +1,6 @@
 ﻿using CasaAsa.Business.Component.Configuration;
 using CasaAsa.Business.Constants;
 using CasaAsa.Core.Configuration;
-using CasaAsa.Core.Configuration.Template;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CasaAsa.API.Areas.Test.Controllers
@@ -20,7 +19,7 @@ namespace CasaAsa.API.Areas.Test.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ConfirmUserReport(int id)
+        public async Task<IActionResult> ConfirmUserReport()
         {
             var templateFields = new TemplateFields
             {
@@ -52,7 +51,7 @@ namespace CasaAsa.API.Areas.Test.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ResetPasswordReport(int id)
+        public async Task<IActionResult> ResetPasswordReport()
         {
             var templateFields = new TemplateFields
             {
@@ -66,7 +65,7 @@ namespace CasaAsa.API.Areas.Test.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetLatestReceipt(int id)
+        public async Task<IActionResult> GetLatestReceipt()
         {
             var templateFields = new TemplateFields
             {

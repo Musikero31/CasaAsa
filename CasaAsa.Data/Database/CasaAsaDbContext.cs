@@ -1,5 +1,4 @@
 ﻿using CasaAsa.Core.Abstraction;
-using CasaAsa.Core.Common;
 using CasaAsa.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -71,23 +70,26 @@ namespace CasaAsa.Data.Database
         private void ApplyAuditInfo()
         {
             var now = DateTime.Now;
-            var userId = _currentUser.UserId;
+            var userId = _currentUser.UserId!.Value;
 
-            foreach (var entry in ChangeTracker.Entries<AuditEntity>())
+            foreach (var entry in ChangeTracker.Entries<IEntityDefault>())
             {
                 switch (entry.State)
                 {
                     case EntityState.Modified:
-                        entry.Entity.CreatedDate = now;
-                        entry.Entity.CreatedBy = userId;
-                        break;
-                    case EntityState.Added:
                         entry.Entity.UpdatedDate = now;
                         entry.Entity.UpdatedBy = userId;
+                        
+                        break;
+                    case EntityState.Added:
+                        entry.Entity.ActiveStatus = true;
+                        entry.Entity.CreatedDate = now;
+                        entry.Entity.CreatedBy = userId;
 
-                        // Prevent overwriting creation data
+                        // Prevent overwriting creation data                        
                         entry.Property(x => x.CreatedBy).IsModified = false;
                         entry.Property(x => x.CreatedDate).IsModified = false;
+                        entry.Property(x => x.ActiveStatus).IsModified = false;
                         break;
                 }
             }
