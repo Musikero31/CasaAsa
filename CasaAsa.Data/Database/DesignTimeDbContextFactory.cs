@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CasaAsa.Core.Abstraction;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
@@ -21,7 +22,9 @@ namespace CasaAsa.Data.Database
 
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
 
-            return new CasaAsaDbContext(optionsBuilder.Options);
+            var designTimeUser = new DesignTimeCurrentUserService();
+
+            return new CasaAsaDbContext(optionsBuilder.Options, designTimeUser);
         }
     }
 }

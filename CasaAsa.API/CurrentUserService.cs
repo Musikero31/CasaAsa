@@ -1,4 +1,5 @@
-﻿using CasaAsa.Core.Abstraction;
+﻿using CasaAsa.Business.Constants;
+using CasaAsa.Core.Abstraction;
 using System.Security.Claims;
 
 namespace CasaAsa.API
@@ -12,7 +13,19 @@ namespace CasaAsa.API
             _contextAccessor = contextAccessor;
         }
 
-        public Guid UserId 
-            => Guid.Parse(_contextAccessor?.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier));
+        public Guid? UserId
+        {
+            get
+            {
+                var userIdValue = _contextAccessor?
+                    .HttpContext?
+                    .User?
+                    .FindFirstValue(ClaimTypes.NameIdentifier);
+
+                return Guid.TryParse(userIdValue, out var userId) 
+                    ? userId 
+                    : ApplicationConstants.SYSTEM_USER_ID;
+            }
+        }
     }
 }

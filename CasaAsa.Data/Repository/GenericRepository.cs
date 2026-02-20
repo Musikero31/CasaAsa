@@ -1,21 +1,19 @@
-﻿using CasaAsa.Core.Abstraction;
-using CasaAsa.Data.Database;
+﻿using CasaAsa.Data.Database;
+using CasaAsa.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace CasaAsa.Data.Repository
 {
-    public class GenericRepository<T> : IRepository<T> where T : class
+    public class GenericRepository<T> : IRepository<T> where T : class, IEntityDefault
     {
         protected readonly CasaAsaDbContext _context;
         protected readonly DbSet<T> _dbSet;
-        private readonly ICurrentUserService _currentUser;
 
-        public GenericRepository(CasaAsaDbContext context, ICurrentUserService currentUser)
+        public GenericRepository(CasaAsaDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();
-            _currentUser = currentUser;
         }
 
         public virtual async Task AddAsync(T entity)
@@ -38,9 +36,17 @@ namespace CasaAsa.Data.Repository
             return await _dbSet.FindAsync(id);
         }
 
-        public virtual void Remove(T entity)
+        public virtual void Remove(T entity, bool isHardDelete = true)
         {
-            _dbSet.Remove(entity);
+            if (isHardDelete)
+            {
+                _dbSet.Remove(entity);
+            }
+            else
+            {
+                entity.ActiveStatus = false;
+                _dbSet.Update(entity);
+            }
         }
 
         public virtual async Task<int> SaveChangesAsync()

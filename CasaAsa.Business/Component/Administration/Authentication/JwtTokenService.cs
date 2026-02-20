@@ -31,7 +31,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             }
 
             var signInKey = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!);
-            var credentials = new SigningCredentials(new SymmetricSecurityKey(signInKey), SecurityAlgorithms.HmacSha512);
+            var credentials = new SigningCredentials(new SymmetricSecurityKey(signInKey), SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],

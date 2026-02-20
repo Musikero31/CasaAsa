@@ -8,7 +8,7 @@ namespace CasaAsa.API.Configuration.Profiles
     {
         public AddressViewModelProfiles()
         {
-            CreateMap<AddressViewModel, Address>();
+            CreateMap<AddressViewModel, Address>().ReverseMap();
         }
     }
 }
