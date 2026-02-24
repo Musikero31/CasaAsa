@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Component\Menu\" />
     <Folder Include="Component\Billing\" />
   </ItemGroup>
 
