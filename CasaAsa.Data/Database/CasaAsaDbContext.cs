@@ -72,7 +72,7 @@ namespace CasaAsa.Data.Database
             var now = DateTime.Now;
             var userId = _currentUser.UserId!.Value;
 
-            foreach (var entry in ChangeTracker.Entries<IEntityDefault>())
+            foreach (var entry in ChangeTracker.Entries<IAuditEntity>())
             {
                 switch (entry.State)
                 {

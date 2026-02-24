@@ -1,6 +1,6 @@
 ﻿namespace CasaAsa.Data.Models
 {
-    public class LockOrder : IEntityDefault
+    public class LockOrder : IAuditEntity
     {
         public int Id { get; set; }
         public DateOnly LockDate { get; set; }

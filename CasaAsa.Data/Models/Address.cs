@@ -2,7 +2,7 @@
 
 namespace CasaAsa.Data.Models
 {
-    public class Address : IEntityDefault
+    public class Address : IAuditEntity
     {
         public int Id { get; set; }
         public required string AddressLine1 { get; set; }

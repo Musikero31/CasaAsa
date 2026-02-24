@@ -1,6 +1,6 @@
 ﻿namespace CasaAsa.Data.Models
 {
-    public class OrderListSummary : IEntityDefault
+    public class OrderListSummary : IAuditEntity
     {
         public int Id { get; set; }
         public int OrderId { get; set; }

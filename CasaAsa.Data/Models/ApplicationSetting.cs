@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CasaAsa.Data.Models
 {
-    public class ApplicationSetting : IEntityDefault
+    public class ApplicationSetting : IAuditEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

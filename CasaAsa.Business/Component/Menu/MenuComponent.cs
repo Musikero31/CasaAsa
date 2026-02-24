@@ -39,12 +39,7 @@ namespace CasaAsa.Business.Component.Menu
             var data = (await _repository.FindAsync(x => x.Id == category.CategoryId && x.ActiveStatus))
                 .FirstOrDefault();
 
-            var createdBy = data!.CreatedBy;
-            var createdDate = data!.CreatedDate;
-
             var result = _mapper.Map(category, data!);
-            result.CreatedBy = createdBy;
-            result.CreatedDate = createdDate;
 
             await Task.Run(() => _repository.Update(result));
 

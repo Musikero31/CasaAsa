@@ -1,6 +1,6 @@
 ﻿namespace CasaAsa.Data.Models
 {
-    public class Order : IEntityDefault
+    public class Order : IAuditEntity
     {
         public int Id { get; set; }
         public DateTime DeliveryDate { get; set; }

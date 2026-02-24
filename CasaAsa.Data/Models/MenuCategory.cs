@@ -1,6 +1,6 @@
 ﻿namespace CasaAsa.Data.Models
 {
-    public class MenuCategory : IEntityDefault
+    public class MenuCategory : IAuditEntity
     {
         public int Id { get; set; }
         public required string CategoryName { get; set; }

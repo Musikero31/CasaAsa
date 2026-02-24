@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace CasaAsa.Data.Repository
 {
-    public class GenericRepository<T> : IRepository<T> where T : class, IEntityDefault
+    public class GenericRepository<T> : IRepository<T> where T : class, IAuditEntity
     {
         protected readonly CasaAsaDbContext _context;
         protected readonly DbSet<T> _dbSet;

@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace CasaAsa.Data.Repository
 {
-    public interface IRepository<T> where T : class, IEntityDefault
+    public interface IRepository<T> where T : class, IAuditEntity
     {
         Task<T?> GetByIdAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();

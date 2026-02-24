@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataModel = CasaAsa.Data.Models;
 using CoreModel = CasaAsa.Core.BusinessModels;
+using CasaAsa.Business.Component.Configuration;
 
 namespace CasaAsa.Business.Profiles
 {
@@ -8,7 +9,9 @@ namespace CasaAsa.Business.Profiles
     {
         public LockSettingMapProfile()
         {
-            CreateMap<DataModel.LockOrder, CoreModel.LockOrder>();
+            CreateMap<DataModel.LockOrder, CoreModel.LockOrder>()
+                .ReverseMap()
+                .IgnoreAuditFields();
         }
     }
 }
