@@ -1,5 +1,6 @@
 using CasaAsa.API.Configuration;
 using CasaAsa.API.Configuration.Profiles;
+using CasaAsa.Business.Component.Administration.Authentication;
 using CasaAsa.Business.Component.Configuration;
 using CasaAsa.Business.Profiles;
 using CasaAsa.Data.Database;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,7 +48,31 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        RequireExpirationTime = true,
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnTokenValidated = async context =>
+        {
+            var tokenService = context.HttpContext
+                .RequestServices
+                .GetRequiredService<IJwtTokenService>();
+
+            var jti = context.Principal?
+                .FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
+
+            if (jti != null)
+            {
+                var isRevoked = await tokenService.IsTokenRevokedAsync(jti);
+
+                if (isRevoked)
+                {
+                    context.Fail("Token has been revoked");
+                }
+            }
+        }
     };
 });
 

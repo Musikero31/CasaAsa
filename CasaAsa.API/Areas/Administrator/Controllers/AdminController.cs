@@ -8,6 +8,7 @@ using CasaAsa.Core.BusinessModels.Authentication;
 using CasaAsa.Core.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace CasaAsa.API.Areas.Administrator.Controllers
 {
@@ -161,6 +162,23 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            var jti = User.FindFirst(JwtRegisteredClaimNames.Jti)?.Value;
+            var exp = User.FindFirst(JwtRegisteredClaimNames.Exp)?.Value;
+
+            if (jti == null || exp == null)
+            {
+                return BadRequest();
+            }
+
+            await _authService.LogoutAsync(jti, exp);
+
+            return Ok("Logged out successfully");
         }
     }
 }

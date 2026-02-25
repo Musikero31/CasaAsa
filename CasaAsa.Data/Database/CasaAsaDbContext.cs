@@ -26,6 +26,7 @@ namespace CasaAsa.Data.Database
         public DbSet<OrderListSummary> OrderListSummaries { get; set; }
         public DbSet<ApplicationSetting> ApplicationSettings { get; set; }
         public DbSet<LockOrder> LockOrders { get; set; }
+        public DbSet<RevokedToken> RevokedTokens { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -194,5 +194,12 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 FullName = user.FullName,
             };
         }
+
+        public async Task LogoutAsync(string jti, string exp)
+        {
+            var expiryDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(exp)).UtcDateTime;
+
+            await _jwtTokenService.RevokeByJtiAsync(jti, expiryDate);
+        }
     }
 }
