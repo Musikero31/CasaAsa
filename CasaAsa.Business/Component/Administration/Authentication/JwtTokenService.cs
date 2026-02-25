@@ -1,4 +1,6 @@
-﻿using CasaAsa.Data.Models;
+﻿using CasaAsa.Data.Database;
+using CasaAsa.Data.Models;
+using CasaAsa.Data.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,10 +12,13 @@ namespace CasaAsa.Business.Component.Administration.Authentication
     public class JwtTokenService : IJwtTokenService
     {
         private readonly IConfiguration _configuration;
+        private readonly IRepository<RevokedToken> _tokenRepo;
 
-        public JwtTokenService(IConfiguration configuration)
+        public JwtTokenService(IConfiguration configuration,
+                               IRepository<RevokedToken> tokenRepo)
         {
             _configuration = configuration;
+            _tokenRepo = tokenRepo;
         }
 
         public Task<string> CreateTokenAsync(ApplicationUser user, IList<string> roles)
@@ -22,7 +27,8 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
-                new Claim(ClaimTypes.Name, user.UserName ?? string.Empty)
+                new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             foreach (var r in roles)
@@ -37,12 +43,30 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(1),
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: credentials
             );
 
             var tokenStr = new JwtSecurityTokenHandler().WriteToken(token);
             return Task.FromResult(tokenStr);
+        }
+
+        public async Task<bool> IsTokenRevokedAsync(string jti)
+        {
+            var result = await _tokenRepo.FindAsync(x => x.Jti == jti);
+
+            return result.Any();
+        }
+
+        public async Task RevokeByJtiAsync(string jti, DateTime expiryDate)
+        {
+            await _tokenRepo.AddAsync(new RevokedToken
+            {
+                Jti = jti,
+                ExpiryDate = expiryDate
+            });
+
+            await _tokenRepo.SaveChangesAsync();
         }
     }
 }
