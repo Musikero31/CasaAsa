@@ -1,8 +1,6 @@
-﻿using CasaAsa.Core.Common;
-
-namespace CasaAsa.Core.BusinessModels.UserProfile
+﻿namespace CasaAsa.Core.BusinessModels.UserProfile
 {
-    public class Customer : AuditEntity
+    public class Customer
     {
         public Guid UserId { get; set; }
         public string FirstName { get; set; }

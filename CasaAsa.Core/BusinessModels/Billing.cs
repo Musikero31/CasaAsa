@@ -1,8 +1,6 @@
-﻿using CasaAsa.Core.Common;
-
-namespace CasaAsa.Core.BusinessModels
+﻿namespace CasaAsa.Core.BusinessModels
 {
-    public class Billing : AuditEntity
+    public class Billing
     {
         public int BillingId { get; set; }
         public int OrderId { get; set; }
