@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CasaAsa.API.Areas.Menu.Data;
+using CasaAsa.API.Areas.Menu.Models;
 using CasaAsa.Business.Component.Menu;
 using CasaAsa.Core.BusinessModels;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,7 @@ namespace CasaAsa.API.Areas.Menu.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateMenuCategory([FromBody] MenuCategoryViewModel model)
+        public async Task<IActionResult> CreateMenuCategory([FromBody] MenuCategoryRequest model)
         {
             var menuCategory = _mapper.Map<MenuCategories>(model);
 
@@ -42,7 +43,7 @@ namespace CasaAsa.API.Areas.Menu.Controllers
 
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateMenuCategory([FromBody] MenuCategoryViewModel model)
+        public async Task<IActionResult> UpdateMenuCategory([FromBody] MenuCategoryRequest model)
         {
             var menuCategory = _mapper.Map<MenuCategories>(model);
 
