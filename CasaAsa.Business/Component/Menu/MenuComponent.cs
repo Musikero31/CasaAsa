@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CasaAsa.Business.Component.Document;
 using CasaAsa.Data.Repository;
 using Microsoft.Extensions.Logging;
 using CoreModel = CasaAsa.Core.BusinessModels;
@@ -10,18 +11,21 @@ namespace CasaAsa.Business.Component.Menu
     {
         private readonly IRepository<DataModel.MenuCategory> _menuCategoryRepo;
         private readonly IRepository<DataModel.MenuDetail> _menuRepo;
+        private readonly IDocumentComponent _docComponent;
         private readonly IMapper _mapper;
         private readonly ILogger<MenuComponent> _logger;
 
         public MenuComponent(IRepository<DataModel.MenuCategory> repository,
                              IMapper mapper,
                              IRepository<DataModel.MenuDetail> menuRepo,
-                             ILogger<MenuComponent> logger)
+                             ILogger<MenuComponent> logger,
+                             IDocumentComponent docComponent)
         {
             _menuCategoryRepo = repository;
             _mapper = mapper;
             _menuRepo = menuRepo;
             _logger = logger;
+            _docComponent = docComponent;
         }
 
         public async Task<List<CoreModel.MenuCategories>> GetMenuCategoriesAsync()
@@ -85,7 +89,12 @@ namespace CasaAsa.Business.Component.Menu
         public async Task CreateMenuDetailAsync(CoreModel.Menu menu)
         {
             var data = _mapper.Map<DataModel.MenuDetail>(menu);
-            
+
+            if (menu.Photo != null)
+            {
+                data.DocumentId = await _docComponent.UploadDocumentAsync(menu.Photo);
+            }
+
             await _menuRepo.AddAsync(data);
             await _menuRepo.SaveChangesAsync();
         }

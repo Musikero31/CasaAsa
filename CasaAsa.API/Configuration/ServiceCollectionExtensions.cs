@@ -1,6 +1,7 @@
 ﻿using CasaAsa.Business.Component.Administration;
 using CasaAsa.Business.Component.Administration.Authentication;
 using CasaAsa.Business.Component.Configuration;
+using CasaAsa.Business.Component.Document;
 using CasaAsa.Business.Component.Menu;
 using CasaAsa.Core.Abstraction;
 using CasaAsa.Data.Database;
@@ -31,6 +32,7 @@ namespace CasaAsa.API.Configuration
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IAddressComponent, AddressComponent>();
             services.AddScoped<IMenuComponent, MenuComponent>();
+            services.AddScoped<IDocumentComponent, DocumentComponent>();
 
             return services;
         }

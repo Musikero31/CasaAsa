@@ -7,10 +7,8 @@
         public string Description { get; set; }
         public int MenuCategoryId { get; set; }
         public string CategoryName { get; set; }
-        //public string PhotoUrl { get; set; }
         public decimal Price { get; set; }
         public bool IsAvailable { get; set; }
-        //public byte[]? FileContent { get; set; }
-        //public int TotalOrders { get; set; }
+        public Documents? Photo { get; set; }
     }
 }
