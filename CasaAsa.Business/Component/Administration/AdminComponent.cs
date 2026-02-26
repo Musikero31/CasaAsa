@@ -46,12 +46,11 @@ namespace CasaAsa.Business.Component.Administration
             {
                 var oldData = data.OrderByDescending(l => l.LockDate).FirstOrDefault(l => l.ActiveStatus);
                 oldData!.ActiveStatus = false;
-                _lockRepository.Update(oldData);
+                await _lockRepository.UpdateAsync(oldData);
             }
 
             await _lockRepository.AddAsync(new DataModel.LockOrder
             {
-                ActiveStatus = true,
                 LockDate = newDate,
                 CreatedDate = DateTime.Now
             });

@@ -6,10 +6,13 @@
         public required string MenuName { get; set; }
         public string? MenuDescription { get; set; }
         public decimal Price { get; set; }
-        public byte[]? Photo { get; set; }
+        // This is commented because this will be moved in a new table called "Documents"
+        // TODO: This will be replaced by the Document ID
+        //public byte[]? Photo { get; set; }
 
         public int MenuCategoryId { get; set; }
         public MenuCategory MenuCategory { get; set; }
+        public bool IsAvailable { get; set; }
 
         public bool ActiveStatus { get; set; }
         public Guid CreatedBy { get; set; }

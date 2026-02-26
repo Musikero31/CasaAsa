@@ -47,7 +47,7 @@ namespace CasaAsa.Business.Component.Administration
 
             data!.ActiveStatus = false;
 
-            await Task.Run(() => _addressRepository.Remove(data, false));
+            await _addressRepository.RemoveAsync(data, false);
             await _addressRepository.SaveChangesAsync();
         }
 
@@ -60,7 +60,7 @@ namespace CasaAsa.Business.Component.Administration
 
             var result = _mapper.Map<CoreModel.Address, DataModel.Address>(address, dataAddress);
 
-            await Task.Run(() => _addressRepository.Update(result));
+            await _addressRepository.UpdateAsync(result);
 
             await _addressRepository.SaveChangesAsync();
         }

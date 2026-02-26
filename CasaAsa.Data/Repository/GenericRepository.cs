@@ -26,6 +26,11 @@ namespace CasaAsa.Data.Repository
             return await _dbSet.Where(predicate).ToListAsync();
         }
 
+        public virtual async Task<T?> FindFirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.FirstOrDefaultAsync(predicate);
+        }
+
         public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
@@ -36,17 +41,20 @@ namespace CasaAsa.Data.Repository
             return await _dbSet.FindAsync(id);
         }
 
-        public virtual void Remove(T entity, bool isHardDelete = true)
+        public virtual async Task RemoveAsync(T entity, bool isHardDelete = true)
         {
-            if (isHardDelete)
+            await Task.Run(() =>
             {
-                _dbSet.Remove(entity);
-            }
-            else
-            {
-                entity.ActiveStatus = false;
-                _dbSet.Update(entity);
-            }
+                if (isHardDelete)
+                {
+                    _dbSet.Remove(entity);
+                }
+                else
+                {
+                    entity.ActiveStatus = false;
+                    _dbSet.Update(entity);
+                }
+            });
         }
 
         public virtual async Task<int> SaveChangesAsync()
@@ -54,9 +62,9 @@ namespace CasaAsa.Data.Repository
             return await _context.SaveChangesAsync();
         }
 
-        public virtual void Update(T entity)
+        public virtual async Task UpdateAsync(T entity)
         {
-            _dbSet.Update(entity);
+            await Task.Run(() => _dbSet.Update(entity));
         }
     }
 }

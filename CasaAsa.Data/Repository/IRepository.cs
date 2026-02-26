@@ -9,8 +9,9 @@ namespace CasaAsa.Data.Repository
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
         Task AddAsync(T entity);
-        void Update(T entity);
-        void Remove(T entity, bool isHardDelete = true);
+        Task UpdateAsync(T entity);
+        Task RemoveAsync(T entity, bool isHardDelete = true);
         Task<int> SaveChangesAsync();
+        Task<T?> FindFirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
     }
 }

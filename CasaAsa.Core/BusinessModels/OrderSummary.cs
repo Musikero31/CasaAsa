@@ -1,8 +1,6 @@
-﻿using CasaAsa.Core.Common;
-
-namespace CasaAsa.Core.BusinessModels
+﻿namespace CasaAsa.Core.BusinessModels
 {
-    public class OrderSummary : AuditEntity
+    public class OrderSummary
     {
     }
 }

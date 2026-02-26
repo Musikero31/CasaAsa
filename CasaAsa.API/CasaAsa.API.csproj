@@ -43,7 +43,6 @@
   <ItemGroup>
     <Folder Include="Areas\Administrator\Data\" />
     <Folder Include="Areas\Administrator\Views\" />
-    <Folder Include="Areas\Menu\Models\" />
     <Folder Include="Areas\Menu\Views\" />
     <Folder Include="Areas\OrderBilling\Controllers\" />
     <Folder Include="Areas\OrderBilling\Data\" />

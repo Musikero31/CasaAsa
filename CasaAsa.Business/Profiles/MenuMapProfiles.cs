@@ -13,6 +13,14 @@ namespace CasaAsa.Business.Profiles
                 .ForMember(dest => dest.Id, source => source.MapFrom(src => src.CategoryId))
                 .IgnoreAuditFields()
                 .ReverseMap();
+
+            CreateMap<CoreModel.Menu, DataModel.MenuDetail>()
+                .ForMember(dest => dest.Id, source => source.MapFrom(src => src.MenuId))
+                .ForMember(dest => dest.MenuDescription, source => source.MapFrom(src => src.Description))
+                .ForMember(dest => dest.MenuName, source => source.MapFrom(src => src.Name))
+                .IgnoreAuditFields()
+                .ReverseMap()
+                .ForMember(dest => dest.CategoryName, source => source.MapFrom(src => src.MenuCategory.CategoryName));
         }
     }
 }

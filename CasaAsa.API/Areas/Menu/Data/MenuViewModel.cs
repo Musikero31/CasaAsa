@@ -1,16 +1,13 @@
-﻿namespace CasaAsa.Core.BusinessModels
+﻿namespace CasaAsa.API.Areas.Menu.Data
 {
-    public class Menu
+    public class MenuViewModel
     {
         public int MenuId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int MenuCategoryId { get; set; }
-        public string CategoryName { get; set; }
-        //public string PhotoUrl { get; set; }
+        public string? CategoryName { get; set; }
         public decimal Price { get; set; }
         public bool IsAvailable { get; set; }
-        //public byte[]? FileContent { get; set; }
-        //public int TotalOrders { get; set; }
     }
 }

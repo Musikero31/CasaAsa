@@ -1,8 +1,6 @@
-﻿using CasaAsa.Core.Common;
-
-namespace CasaAsa.Core.BusinessModels
+﻿namespace CasaAsa.Core.BusinessModels
 {
-    public class MenuCategories : AuditEntity
+    public class MenuCategories
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
