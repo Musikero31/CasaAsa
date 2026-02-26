@@ -37,7 +37,7 @@ namespace CasaAsa.API.Areas.Menu.Controllers
 
             await _menuComponent.CreateNewMenuCategoryAsync(menuCategory);
 
-            return Ok();
+            return Ok("Menu category created");
         }
 
         [HttpPut]
@@ -48,7 +48,7 @@ namespace CasaAsa.API.Areas.Menu.Controllers
 
             await _menuComponent.UpdateMenuCategoryAsync(menuCategory);
 
-            return Ok();
+            return Ok("Menu category updated.");
         }
 
         [HttpDelete]
@@ -57,7 +57,65 @@ namespace CasaAsa.API.Areas.Menu.Controllers
         {
             await _menuComponent.DeleteMenuCategoryAsync(categoryId);
 
-            return Ok();
+            return Ok("Menu category removed.");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Customer")]
+        public async Task<IActionResult> GetMenuListByCategory(int categoryId)
+        {
+            var result = await _menuComponent.GetMenuListByCategoryAsync(categoryId);
+
+            return Ok(result.Select(_mapper.Map<MenuViewModel>));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateNewMenu([FromBody] MenuViewModel model)
+        {
+            var menu = _mapper.Map<Core.BusinessModels.Menu>(model);
+
+            await _menuComponent.CreateMenuDetailAsync(menu);
+
+            return Ok("New menu created");
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateMenu([FromBody] MenuViewModel model)
+        {
+            var menu = _mapper.Map<Core.BusinessModels.Menu>(model);
+
+            await _menuComponent.UpdateMenuDetailAsync(menu);
+
+            return Ok("Menu has been updated.");
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemoveMenu(int menuId)
+        {
+            await _menuComponent.RemoveMenuDetailAsync(menuId);
+
+            return Ok("Menu has been deleted");
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SetMenuAvailabilityStatus(int menuId, bool isAvailable)
+        {
+            await _menuComponent.UpdateMenuAvailabilityStatusAsync(menuId, isAvailable);
+
+            return Ok("Menu availability status has been updated.");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Customer")]
+        public async Task<IActionResult> GetMenuDetails(int menuId)
+        {
+            var result = await _menuComponent.GetMenuDetailAsync(menuId);
+
+            return Ok(_mapper.Map<MenuViewModel>(result));
         }
     }
 }

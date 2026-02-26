@@ -9,6 +9,7 @@ namespace CasaAsa.API.Configuration.Profiles
         public MenuCategoryViewModelProfiles()
         {
             CreateMap<MenuCategoryViewModel, MenuCategories>().ReverseMap();
+            CreateMap<MenuViewModel, Menu>().ReverseMap();
         }
     }
 }
