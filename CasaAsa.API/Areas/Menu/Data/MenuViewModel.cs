@@ -1,4 +1,6 @@
-﻿namespace CasaAsa.API.Areas.Menu.Data
+﻿using CasaAsa.API.Models;
+
+namespace CasaAsa.API.Areas.Menu.Data
 {
     public class MenuViewModel
     {
@@ -9,5 +11,6 @@
         public string? CategoryName { get; set; }
         public decimal Price { get; set; }
         public bool IsAvailable { get; set; }
+        public DocumentViewModel? Photo { get; set; }
     }
 }
