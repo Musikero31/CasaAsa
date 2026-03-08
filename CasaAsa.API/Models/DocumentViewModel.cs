@@ -8,5 +8,6 @@
         public string DocumentType { get; set; }
         public string FileType { get; set; }
         public string MimeType { get; set; }
+        public string DocumentPath { get; set; }
     }
 }
