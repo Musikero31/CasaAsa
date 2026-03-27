@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<body>
+
+    <button onclick="loadFile()">Load File</button>
+
+    <div id="output"></div>
+
+    <script>
+async function loadFile() {
+    const response = await fetch("https://localhost:7218/api/DocumentTest/RetrieveDocument?docId=3");
+    const data = await response.json();
+
+    if (data.documentType === "Image") {
+        document.getElementById("output").innerHTML =
+            `<img src="${data.base64DocumentFile}" width="400"/>`;
+    } else {
+        document.getElementById("output").innerHTML =
+            `<a href="${data.base64DocumentFile}" download="${data.fileName}">
+                Download File
+             </a>`;
+    }
+}
+    </script>
+
+</body>
+</html>

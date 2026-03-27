@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CasaAsa.API.Areas.Test.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class DocumentTestController : ControllerBase
     {
@@ -35,7 +35,7 @@ namespace CasaAsa.API.Areas.Test.Controllers
             var data = await _docComponent.RetrieveDocumentAsync(docId);
 
             var result = _mapper.Map<DocumentViewModel>(data);
-            result.Base64DocumentFile = Convert.ToBase64String(data.DocumentFile);
+            result.Base64DocumentFile = $"data:{result.MimeType};base64,{Convert.ToBase64String(data.DocumentFile)}";
 
             return Ok(result);
         }
