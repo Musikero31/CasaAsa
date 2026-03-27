@@ -6,7 +6,7 @@ namespace CasaAsa.Data.Models
     {
         public int Id { get; set; }
         public byte[] DocumentFile { get; set; }
-        public string DocumentName { get; set; }
+        public string FileName { get; set; }
         [MaxLength(10)]
         public string DocumentType { get; set; }
         [MaxLength(10)]

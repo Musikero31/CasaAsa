@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CasaAsa.Business.Constants;
 using CasaAsa.Data.Repository;
 using Microsoft.Extensions.Logging;
 using CoreModel = CasaAsa.Core.BusinessModels;
@@ -27,11 +28,21 @@ namespace CasaAsa.Business.Component.Document
 
             var data = _mapper.Map<DataModel.Documents>(document);
             data.DocumentFile = fileBytes;
+            data.MimeType = RetrieveMimeType(document.DocumentPath);
+            data.FileExtension = Path.GetExtension(document.DocumentPath);
+            data.FileName = Path.GetFileName(document.DocumentPath);
 
             await _docRepo.AddAsync(data);
             await _docRepo.SaveChangesAsync();
 
             return data.Id;
+        }
+
+        public async Task<CoreModel.Documents> RetrieveDocumentAsync(int docId)
+        {
+            var data = await _docRepo.GetByIdAsync(docId);
+
+            return _mapper.Map<CoreModel.Documents>(data);
         }
 
         public async Task RemoveDocumentAsync(int docId)
@@ -44,5 +55,41 @@ namespace CasaAsa.Business.Component.Document
 
             _logger.LogInformation($"Document id {docId} has been deleted.");
         }
+
+        private string RetrieveMimeType(string documentPath)
+        {
+            string result = string.Empty;
+
+            var extension = Path.GetExtension(documentPath);
+
+            switch (extension)
+            {
+                case ".gif":
+                    result = MimeTypes.GIF; 
+                    break;
+                case ".jpeg":
+                case ".jpg":
+                    result = MimeTypes.JPEG;
+                    break;
+                case ".png":
+                    result = MimeTypes.PNG;
+                    break;
+                case ".pdf":
+                    result = MimeTypes.PDF;
+                    break;
+                case ".doc":
+                    result = MimeTypes.DOC;
+                    break;
+                case ".docx":
+                    result = MimeTypes.DOCX;
+                    break;
+                default:
+                    break;
+            }
+
+            return result;
+        }
+
+
     }
 }
