@@ -55,6 +55,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\DisplayDocumentTest.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Html\CustomerReceipt.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

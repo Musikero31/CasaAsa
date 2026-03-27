@@ -164,4 +164,7 @@ await SeederConfiguration.SeedDefaultsAsync(app.Services);
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
+// Temporary for testing only
+app.UseStaticFiles();
+
 app.Run();
