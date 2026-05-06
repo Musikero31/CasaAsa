@@ -33,7 +33,7 @@ namespace CasaAsa.Business.Component.Administration
         {
             var data = await _lockRepository.GetAllAsync();
 
-            var result = data.OrderByDescending(l => l.LockDate).FirstOrDefault(l => l.ActiveStatus);
+            var result = data.SingleOrDefault(l => l.ActiveStatus);
 
             return _mapper.Map<CoreModel.LockOrder>(result);
         }

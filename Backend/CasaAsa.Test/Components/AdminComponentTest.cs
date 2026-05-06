@@ -1,5 +1,6 @@
 ﻿using CasaAsa.Data.Repository;
 using DataModel = CasaAsa.Data.Models;
+using CoreModel = CasaAsa.Core.BusinessModels;
 using AutoMapper;
 using CasaAsa.Business.Component.Administration;
 using NSubstitute;
@@ -32,6 +33,7 @@ namespace CasaAsa.Test.Components
             _adminComp = new AdminComponent(_lockRepo, _mapper, _authSvc, _addressComp, _logger);
         }
 
+        #region Latest Lock Order Tests
         [Fact]
         public async Task GetLatestLockOrderAsync_Should_Return_Latest_Order_Date()
         {
@@ -69,5 +71,69 @@ namespace CasaAsa.Test.Components
             result.LockDate.Should().Be(DateOnly.FromDateTime(DateTime.Now));
             
         }
+
+        [Fact]
+        public async Task GetLatestLockOrderAsync_ShouldReturnNull_WhenNoActiveRecordsExist()
+        {
+            // Arrange
+            var data = new List<DataModel.LockOrder>
+            {
+                new DataModel.LockOrder
+                {
+                    ActiveStatus = false
+                }
+            };
+
+            _lockRepo.GetAllAsync().Returns(data);
+
+            // Act
+            var result = await _adminComp.GetLatestLockOrderAsync();
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task GetLatestLockOrderAsync_ShouldReturnNull_WhenNoRecords()
+        {
+            // Arrange
+            var data = new List<DataModel.LockOrder>();
+
+            // Act
+            var result = await _adminComp.GetLatestLockOrderAsync();
+
+            // Assert
+            result.Should().BeNull();
+
+        }
+
+        [Fact]
+        public async Task GetLatestLockOrderAsync_ShouldThrow_WhenMultipleRecords()
+        {
+            // Arrange
+            var data = new List<DataModel.LockOrder>
+            {
+                new DataModel.LockOrder
+                {
+                    ActiveStatus = true
+                },
+                new DataModel.LockOrder
+                {
+                    ActiveStatus = true
+                }
+            };
+
+            _lockRepo.GetAllAsync().Returns(data);
+
+            // Act
+            Func<Task> result = _adminComp.GetLatestLockOrderAsync;
+
+            // Assert
+            await result.Should().ThrowAsync<InvalidOperationException>();
+        }
+
+        #endregion
+
+
     }
 }
