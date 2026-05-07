@@ -44,9 +44,13 @@ namespace CasaAsa.Business.Component.Administration
 
             if (data != null && data.ToList().Count > 0)
             {
-                var oldData = data.OrderByDescending(l => l.LockDate).FirstOrDefault(l => l.ActiveStatus);
-                oldData!.ActiveStatus = false;
-                await _lockRepository.UpdateAsync(oldData);
+                _logger.LogDebug("Multiple Active Dates...");
+
+                foreach (var item in data)
+                {
+                    item.ActiveStatus = false;
+                    await _lockRepository.UpdateAsync(item);
+                }
             }
 
             await _lockRepository.AddAsync(new DataModel.LockOrder

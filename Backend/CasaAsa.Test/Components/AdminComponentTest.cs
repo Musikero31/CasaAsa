@@ -69,7 +69,7 @@ namespace CasaAsa.Test.Components
             result.Should().NotBeNull();
             result.ActiveStatus.Should().BeTrue();
             result.LockDate.Should().Be(DateOnly.FromDateTime(DateTime.Now));
-            
+
         }
 
         [Fact]
@@ -132,8 +132,110 @@ namespace CasaAsa.Test.Components
             await result.Should().ThrowAsync<InvalidOperationException>();
         }
 
+        [Fact]
+        public async Task CreateNewLockOrderDateAsync_ShouldInsert_WhenNoExistingRecords()
+        {
+            // Arrange
+            _lockRepo.GetAllAsync().Returns(new List<DataModel.LockOrder>());
+
+            var newDate = DateOnly.FromDateTime(DateTime.Today);
+
+            // Act
+            await _adminComp.CreateNewLockOrderDateAsync(newDate);
+
+            // Assert
+            await _lockRepo.Received(1)
+                .AddAsync(Arg.Is<DataModel.LockOrder>(x => x.LockDate == newDate && x.CreatedDate != default));
+
+            await _lockRepo.Received(1).SaveChangesAsync();
+
+            await _lockRepo.DidNotReceive().UpdateAsync(Arg.Any<DataModel.LockOrder>());
+
+        }
+
+        [Fact]
+        public async Task CreateNewLockOrderDateAsync_ShouldDeactivateAllExistingRecords()
+        {
+            // Arrange
+            var existing = new List<DataModel.LockOrder>
+            {
+                new DataModel.LockOrder
+                {
+                    ActiveStatus = true
+                },
+                new DataModel.LockOrder
+                {
+                    ActiveStatus = true
+                }
+            };
+
+            _lockRepo.GetAllAsync().Returns(existing);
+
+            var newDate = DateOnly.FromDateTime(DateTime.Today);
+
+            // Act
+            await _adminComp.CreateNewLockOrderDateAsync(newDate);
+
+            // Assert
+            existing.ForEach(x => x.ActiveStatus.Should().BeFalse());
+
+            await _lockRepo.Received(existing.Count).UpdateAsync(Arg.Any<DataModel.LockOrder>());
+        }
+
+        [Fact]
+        public async Task CreateNewLockOrderDateAsync_ShouldInsertNewRecord_WhenExistingRecordsExist()
+        {
+            // Arrange
+            _lockRepo.GetAllAsync().Returns(new List<DataModel.LockOrder> {
+                new DataModel.LockOrder()
+            });
+
+            var newDate = DateOnly.FromDateTime(DateTime.Today);
+
+            // Act
+            await _adminComp.CreateNewLockOrderDateAsync(newDate);
+
+            // Assert
+            await _lockRepo.Received(1)
+                .AddAsync(Arg.Is<DataModel.LockOrder>(x => x.LockDate == newDate));
+
+            await _lockRepo.Received(1).SaveChangesAsync();
+        }
+
+        [Fact]
+        public async Task CreateNewLockOrderDateAsync_ShouldInsert_WhenRepositoryReturnsNull()
+        {
+            // Arrange
+            _lockRepo.GetAllAsync().Returns(Enumerable.Empty<DataModel.LockOrder>());
+
+            var newDate = DateOnly.FromDateTime(DateTime.Today);
+
+            // Act
+
+            await _adminComp.CreateNewLockOrderDateAsync(newDate);
+
+            // Assert
+            await _lockRepo.DidNotReceive().UpdateAsync(Arg.Any<DataModel.LockOrder>());
+            await _lockRepo.Received(1).AddAsync(Arg.Any<DataModel.LockOrder>());
+            await _lockRepo.Received(1).SaveChangesAsync();
+        }
+
+        [Fact]
+        public async Task CreateNewLockOrderDateAsync_ShouldSetCreatedDate()
+        {
+            // Arrange
+            _lockRepo.GetAllAsync().Returns(new List<DataModel.LockOrder>());
+
+            var newDate = DateOnly.FromDateTime(DateTime.Today);
+
+            // Act
+            await _adminComp.CreateNewLockOrderDateAsync(newDate);
+
+            // Assert
+            await _lockRepo.Received(1).AddAsync(Arg.Is<DataModel.LockOrder>(x => x.CreatedDate > DateTime.MinValue));
+
+        }
+
         #endregion
-
-
     }
 }
