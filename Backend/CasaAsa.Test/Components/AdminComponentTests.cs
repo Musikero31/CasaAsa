@@ -11,7 +11,7 @@ using FluentAssertions;
 
 namespace CasaAsa.Test.Components
 {
-    public class AdminComponentTest
+    public class AdminComponentTests
     {
         private readonly IRepository<DataModel.LockOrder> _lockRepo;
         private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ namespace CasaAsa.Test.Components
         private readonly IAddressComponent _addressComp;
         private readonly ILogger<AdminComponent> _logger;
 
-        public AdminComponentTest()
+        public AdminComponentTests()
         {
             _lockRepo = Substitute.For<IRepository<DataModel.LockOrder>>();
             _authSvc = Substitute.For<IAuthenticationService>();
@@ -235,6 +235,10 @@ namespace CasaAsa.Test.Components
             await _lockRepo.Received(1).AddAsync(Arg.Is<DataModel.LockOrder>(x => x.CreatedDate > DateTime.MinValue));
 
         }
+
+        #endregion
+
+        #region RegisterAsync Tests
 
         #endregion
     }
