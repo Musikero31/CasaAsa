@@ -1,7 +1,6 @@
-import { IBaseRepository } from "./IBaseRepository";
 import { httpClient } from "../api/httpClient";
 
-export class BaseRepository<T> implements IBaseRepository<T> {
+export class BaseRepository<T> {
     constructor(private endpoint: string) {}
 
     async getAll(): Promise<T[]> {
