@@ -1,8 +1,8 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthApiService } from '../../shared/services/features/auth-api.service';
+import { AuthApiService } from '../../../shared/services/features/auth-api.service';
 import { Router, RouterLink } from '@angular/router';
-import { AuthenticationService } from '../../core/services/authentication.service';
+import { AuthenticationService } from '../../../core/services/authentication.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
 
@@ -20,7 +20,7 @@ export class Login {
   
   loginForm = this._formBuilder.group({
     username: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
+    password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
   constructor(public authSvc: AuthenticationService) { }
@@ -28,6 +28,9 @@ export class Login {
   login() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      // TODO: Display validation errors in a more user-friendly way
+      // TODO: Highlight invalid fields
+      alert("Errors: " + JSON.stringify(this.loginForm.errors));
       return;
     }
 

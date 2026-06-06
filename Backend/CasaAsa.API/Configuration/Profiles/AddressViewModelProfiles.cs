@@ -8,7 +8,9 @@ namespace CasaAsa.API.Configuration.Profiles
     {
         public AddressViewModelProfiles()
         {
-            CreateMap<AddressViewModel, Address>().ReverseMap();
+            CreateMap<AddressViewModel, Address>()
+                .ForMember(dest => dest.Postcode, source => source.MapFrom(src => src.ZipCode))
+                .ReverseMap();
         }
     }
 }

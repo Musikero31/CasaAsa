@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { CustomerModel } from "../../../models/customer.model";
+import { CustomerModel } from "../../models/customer.model";
 import { Observable } from "rxjs";
-import { CurrentUserModel } from "../../../models/authentication/currentUser.model";
-import { ChangePasswordModel } from "../../../models/authentication/changePassword.model";
+import { CurrentUserModel } from "../../models/authentication/currentUser.model";
+import { ChangePasswordModel } from "../../models/authentication/changePassword.model";
 import { environment } from "../../../../environments/environment";
 
 // Manages the calls to the authentication API

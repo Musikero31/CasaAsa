@@ -1,10 +1,11 @@
 import { AddressModel } from "./address.model";
 
 export interface CustomerModel {
-    userId: string;
+    userId: string | null;
     firstName: string;
     lastName: string;
-    email: string;
+    username: string;
+    password: string;
     phoneNumber: string;
     addresses: AddressModel[];
 }

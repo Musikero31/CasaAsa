@@ -10,7 +10,8 @@ namespace CasaAsa.API.Configuration.Profiles
         public AdminViewModelProfiles()
         {
             CreateMap<CustomerViewModel, Customer>();
-            CreateMap<CustomerViewModel, Auth.RegisterRequest>();
+            CreateMap<CustomerViewModel, Auth.RegisterRequest>()
+                .ForMember(dest => dest.Email, source => source.MapFrom(src => src.Username));
         }
     }
 }

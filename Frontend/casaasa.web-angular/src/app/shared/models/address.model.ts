@@ -5,7 +5,7 @@ export interface AddressModel {
     addressLine3?: string;
     city: string;
     state: string;
-    postcode: string;
+    zipCode: string;
   
     contactPerson: string;
     contactNumber: string;

@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from "@angular/core";
-import { CurrentUserModel } from "../../models/authentication/currentUser.model";
+import { CurrentUserModel } from "../../shared/models/authentication/currentUser.model";
 
 /// Manages the authentication state and user roles
 @Injectable({
