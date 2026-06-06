@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CasaAsa.API.Areas.Administrator.Data;
 using CasaAsa.API.Areas.Administrator.Models;
 using CasaAsa.Business.Component.Administration.Authentication;
 using CasaAsa.Business.Component.Configuration;
@@ -8,6 +9,7 @@ using CasaAsa.Core.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace CasaAsa.API.Areas.Administrator.Controllers
 {
@@ -19,16 +21,19 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         private readonly IMapper _mapper;
         private readonly IMailComponent _mailComponent;
         private readonly IHtmlParser _htmlParser;
+        private readonly IWebHostEnvironment _webEnv;
 
         public AuthController(IAuthenticationService authService,
                               IMapper mapper,
                               IMailComponent mailComponent,
-                              IHtmlParser htmlParser)
+                              IHtmlParser htmlParser,
+                              IWebHostEnvironment webEnv)
         {
             _authService = authService;
             _mapper = mapper;
             _mailComponent = mailComponent;
             _htmlParser = htmlParser;
+            _webEnv = webEnv;
         }
 
         [HttpPost]
@@ -38,11 +43,13 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             var register = _mapper.Map<RegisterRequest>(model);
             var result = await _authService.RegisterAsync(register);
 
+            var response = PrepareLoginResponse(result);
+
             // Retrieve the template
-            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/Admin/Confirm?userId={result.TokenResponse.UserId}&token={result.TokenResponse.Token}";
+            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/Admin/Confirm?userId={result.TokenResponse!.UserId}&token={result.TokenResponse.Token}";
             var mailParameters = new TemplateFields
             {
-                FullName = result.FullName,
+                FullName = result.FullName!,
                 Username = result.TokenResponse.Email,
                 OtherParameters = new Dictionary<string, string>
                 {
@@ -58,7 +65,7 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             {
                 FromEmail = "casa.asa@sarapfoods.com",
                 SenderName = "Casa Asa Admin",
-                ReceiverName = result.FullName,
+                ReceiverName = result.FullName!,
                 ToEmail = result.TokenResponse.Email,
                 Subject = "Confirm User",
                 Body = email
@@ -66,7 +73,7 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
             _mailComponent.SendMail(mail);
 
-            return Ok(result);
+            return Ok(response);
         }
 
         [HttpPost]
@@ -74,8 +81,9 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             var result = await _authService.LoginAsync(model.Username, model.Password);
+            var response = PrepareLoginResponse(result);
 
-            return Ok(result);
+            return Ok(response);
         }
 
         [HttpGet]
@@ -98,11 +106,11 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         {
             var result = await _authService.ResetPassword(username);
 
-            var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/api/Admin/ChangePassword?userId={result.TokenResponse.UserId}&token={result.TokenResponse.Token}";
+            var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/api/Admin/ChangePassword?userId={result.TokenResponse!.UserId}&token={result.TokenResponse.Token}";
 
             var mailParameters = new TemplateFields
             {
-                FullName = result.FullName,
+                FullName = result.FullName!,
                 Username = result.TokenResponse.Email,
                 OtherParameters = new Dictionary<string, string>
                 {
@@ -119,7 +127,7 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             {
                 FromEmail = "casa.asa@sarapfoods.com",
                 SenderName = "Casa Asa Admin",
-                ReceiverName = result.FullName,
+                ReceiverName = result.FullName!,
                 ToEmail = result.TokenResponse.Email,
                 Subject = "Confirm User",
                 Body = email
@@ -156,9 +164,63 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
                 return BadRequest();
             }
 
+            Response.Cookies.Delete("accessToken");
             await _authService.LogoutAsync(jti, exp);
 
             return Ok("Logged out successfully");
         }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetCurrentUser()
+        {
+            var fullName = User.FindFirst(ClaimTypes.Name)?.Value ?? string.Empty;
+            var username = User.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+            var roles = User.FindAll(ClaimTypes.Role).Select(x => x.Value).ToList();
+
+            Guid userId = default;
+
+            var subjectClaim = User.FindFirst(ClaimTypes.NameIdentifier)
+                   ?? User.FindFirst(JwtRegisteredClaimNames.Sub);
+
+            if (subjectClaim != null && Guid.TryParse(subjectClaim.Value, out Guid parsedUserId))
+            {
+                userId = parsedUserId;
+            }
+
+            return Ok(new LoginResponse
+            {
+                Succeeded = true,
+                UserId = userId,
+                FullName = fullName,
+                Username = username,
+                Roles = roles,
+            });
+        }
+
+        private LoginResponse PrepareLoginResponse(AuthenticationResult result)
+        {
+            if (result.Succeeded)
+            {
+                Response.Cookies.Append("accessToken", result.TokenResponse!.Token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = _webEnv.IsDevelopment() ? SameSiteMode.None : SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddHours(1)
+                });
+            }
+
+            return new LoginResponse
+            {
+                Succeeded = result.Succeeded,
+                UserId = result.TokenResponse?.UserId,
+                Username = result.TokenResponse?.Email,
+                FullName = result.FullName,
+                Roles = result.TokenResponse?.Roles,
+                Errors = result.Errors,
+            };
+        }
+
     }
 }
