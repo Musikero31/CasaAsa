@@ -1,0 +1,206 @@
+<div class="py-5">
+
+    <div class="row justify-content-center">
+        <div class="mx-auto">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Register New User</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <form [formGroup]="registerForm" (ngSubmit)="register()">
+                        <div class="row">
+                            <!-- LEFT COLUMN -->
+                            <div class="col-md-6">
+
+                                <div class="mb-3">
+                                    <label class="form-label">First Name</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="firstName"
+                                        (change)="setSameContactName()"
+                                        placeholder="First Name">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Last Name</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="lastName"
+                                        (change)="setSameContactName()"
+                                        placeholder="Last Name">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Username (Email)</label>
+                                    <input
+                                        type="email"
+                                        class="form-control"
+                                        formControlName="username"
+                                        placeholder="Email Address">
+                                </div>
+
+                                <!-- Convert this to use the password component instead of duplicating the code for password and confirm password fields. -->
+                                <!-- BEGIN -->
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        formControlName="password"
+                                        placeholder="Password">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Confirm Password</label>
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        formControlName="confirmPassword"
+                                        placeholder="Confirm Password">
+                                </div>
+                                <!-- END -->
+                                 
+                                <div class="mb-3">
+                                    <label class="form-label">Phone Number</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="phoneNumber"
+                                        (change)="setSamePhoneNumber()"
+                                        placeholder="Phone Number">
+                                </div>
+
+                            </div>
+
+                            <!-- RIGHT COLUMN -->
+                            <div class="col-md-6">
+
+                                <div class="mb-1">
+                                    <label class="form-label">Address</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="addressLine1"
+                                        placeholder="Address Line 1">
+                                </div>
+
+                                <div class="mb-1">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="addressLine2"
+                                        placeholder="Address Line 2">
+                                </div>
+
+                                <div class="mb-3">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        formControlName="addressLine3"
+                                        placeholder="Address Line 3">
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label class="form-label">City</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            formControlName="city"
+                                            placeholder="City">
+                                    </div>                                    
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">State Code</label>
+                                        <!-- <input
+                                            type="text"
+                                            class="form-control"
+                                            formControlName="state"
+                                            placeholder="State Code"> -->
+                                        <ng-select
+                                            [items]="states"
+                                            bindLabel="name"
+                                            bindValue="code"
+                                            [searchable]="true"
+                                            [clearable]="true"
+                                            formControlName="state"
+                                            placeholder="State Code">
+                                        </ng-select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Zip Code</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            formControlName="zipCode"
+                                            placeholder="Zip Code">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Contact Person</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            formControlName="contactPerson"
+                                            placeholder="Contact Person">
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Contact Number</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            formControlName="contactNumber"
+                                            placeholder="Contact Number">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <div class="form-check">
+                                            <input
+                                                type="checkbox"
+                                                class="form-check-input"
+                                                formControlName="isContactSameAsUser"
+                                                (change)="setContactSameAsUser()"
+                                                id="isContactSameAsUser">
+                                            <label class="form-check-label" for="isContactSameAsUser">
+                                                Is contact person and number same as user's name and phone number?
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-center gap-3">
+                            <button type="submit" class="btn btn-casa">
+                                Register
+                            </button>
+                            <button type="reset" class="btn btn-casa-outline" 
+                                (click)="clear($event)">
+                                Clear
+                            </button>
+                        </div>                        
+                    </form>
+                    <hr>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a
+                            routerLink="/login"
+                            class="text-decoration-none fw-semibold ms-1">
+                            Already have an account? Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

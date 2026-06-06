@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { Login } from './features/login/login';
+import { Login } from './features/auth/login/login';
 import { AppAdmin } from './features/admin/app-admin';
 import { AppCustomer } from './features/customer/app-customer';
 import { DashboardAdmin } from './features/admin/dashboard.admin/dashboard.admin';
 import { DashboardCustomer } from './features/customer/dashboard.customer/dashboard.customer';
-import { Register } from './features/register/register';
-import { ForgotPassword } from './features/forgot-password/forgot-password';
+import { ForgotPassword } from './features/auth/forgot-password/forgot-password';
 import { adminGuard } from './core/guards/admin.guard';
 import { customerGuard } from './core/guards/customer.guard';
+import { Register } from './features/auth/register/register';
 
 export const routes: Routes = [
     {
@@ -18,6 +18,11 @@ export const routes: Routes = [
     {
         path: 'login',
         component: Login,
+        pathMatch: 'full'
+    },
+    {
+        path: 'register',
+        component: Register,
         pathMatch: 'full'
     },
     {

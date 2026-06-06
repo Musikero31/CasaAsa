@@ -8,7 +8,7 @@
         public string? AddressLine3 { get; set; }
         public required string City { get; set; }
         public required string State { get; set; }
-        public required string Postcode { get; set; }
+        public required string ZipCode { get; set; }
 
         public required string ContactPerson { get; set; }
         public required string ContactNumber { get; set; }
