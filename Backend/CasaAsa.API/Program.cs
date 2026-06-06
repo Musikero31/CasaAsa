@@ -72,6 +72,15 @@ builder.Services.AddAuthentication(options =>
                     context.Fail("Token has been revoked");
                 }
             }
+        },
+        OnMessageReceived = context =>
+        {            
+            if (string.IsNullOrEmpty(context.Token))
+            {
+                context.Token = context.Request.Cookies["accessToken"];
+            }
+
+            return Task.CompletedTask;
         }
     };
 });
@@ -144,6 +153,17 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AngularPolicy", policy =>
+    {
+        policy.WithOrigins(builder.Configuration["Cors:AllowedOrigins"]?.Split(",") ?? [])
+              .WithHeaders("Content-Type", "Authorization")
+              .WithMethods("GET", "POST", "PUT", "DELETE")
+              .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -156,6 +176,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AngularPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
