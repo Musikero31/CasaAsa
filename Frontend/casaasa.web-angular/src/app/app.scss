@@ -1,0 +1,48 @@
+.center-div {
+    margin: 0 auto;
+    width: 50%
+}
+
+.navbar-brand-fix {
+    line-height: 50px !important;
+    vertical-align: middle !important;
+    padding-top: 25px !important;
+}
+
+.btn-casa, .casa-selected {
+    background-color: #907B4E;
+    color: #FFFFFF;
+}
+
+.tab-pane div.form-group {
+    border-left: 1px solid #ddd;
+}
+
+.btn-casa-outline {
+    border-color: #907B4E;
+    color: #907B4E;
+}
+
+.error-label {
+    font-weight: bolder;
+    margin-top: 5px;
+    color: red;
+}
+
+.header-label {
+    font-weight: bold
+}
+
+#MenuCarousel {
+    margin: auto;
+}
+
+#MenuCarousel.menu-carousel, img.menu-carousel {
+    width: 350px;
+}
+
+.required:after {
+    content: '*';
+    color: red;
+    font-weight: bold;
+}
