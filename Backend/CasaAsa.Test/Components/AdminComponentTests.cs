@@ -30,7 +30,7 @@ namespace CasaAsa.Test.Components
             var mapping = new TestMappingProfiles();
             _mapper = mapping.Mapper;
 
-            _adminComp = new AdminComponent(_lockRepo, _mapper, _authSvc, _addressComp, _logger);
+            _adminComp = new AdminComponent(_lockRepo, _mapper, _logger);
         }
 
         #region Latest Lock Order Tests

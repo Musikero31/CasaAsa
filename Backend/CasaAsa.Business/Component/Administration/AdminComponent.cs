@@ -2,8 +2,6 @@
 using CoreModel = CasaAsa.Core.BusinessModels;
 using AutoMapper;
 using CasaAsa.Data.Repository;
-using CasaAsa.Core.BusinessModels.Authentication;
-using CasaAsa.Business.Component.Administration.Authentication;
 using Microsoft.Extensions.Logging;
 
 namespace CasaAsa.Business.Component.Administration
@@ -12,20 +10,14 @@ namespace CasaAsa.Business.Component.Administration
     {
         private readonly IRepository<DataModel.LockOrder> _lockRepository;
         private readonly IMapper _mapper;
-        private readonly IAuthenticationService _authService;
-        private readonly IAddressComponent _addressComponent;
         private readonly ILogger<AdminComponent> _logger;
 
         public AdminComponent(IRepository<DataModel.LockOrder> lockRepository,
                               IMapper mapper,
-                              IAuthenticationService authService,
-                              IAddressComponent addressComponent,
                               ILogger<AdminComponent> logger)
         {
             _lockRepository = lockRepository;
             _mapper = mapper;
-            _authService = authService;
-            _addressComponent = addressComponent;
             _logger = logger;
         }
 
@@ -60,26 +52,6 @@ namespace CasaAsa.Business.Component.Administration
             });
 
             await _lockRepository.SaveChangesAsync();
-        }
-
-        public async Task<AuthenticationResult> RegisterAsync(RegisterRequest register)
-        {
-            var result = await _authService.RegisterUserAsync(register);
-
-            foreach (var address in register.Addresses)
-            {
-                if (address.ContactIsSameAsUser)
-                {
-                    address.ContactPerson = register.FirstName + " " + register.LastName;
-                    address.ContactNumber = register.PhoneNumber;
-                }
-
-                await _addressComponent.CreateAddressAsync(address, result.TokenResponse.UserId);                
-            }
-
-            _logger.LogInformation($"User {register.Email} has been registered.");
-
-            return result;
         }
     }
 }

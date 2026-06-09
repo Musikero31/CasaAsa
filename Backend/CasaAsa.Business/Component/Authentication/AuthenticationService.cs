@@ -15,21 +15,44 @@ namespace CasaAsa.Business.Component.Administration.Authentication
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IJwtTokenService _jwtTokenService;
         private readonly ILogger<AuthenticationService> _logger;
+        private readonly IAddressComponent _addressComponent;
+
 
         public AuthenticationService(UserManager<ApplicationUser> userManager,
                                      SignInManager<ApplicationUser> signInManager,
                                      RoleManager<ApplicationRole> roleManager,
                                      IJwtTokenService jwtTokenService,
-                                     ILogger<AuthenticationService> logger)
+                                     ILogger<AuthenticationService> logger,
+                                     IAddressComponent addressComponent)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _jwtTokenService = jwtTokenService;
             _logger = logger;
+            _addressComponent = addressComponent;
         }
 
-        public async Task<AuthenticationResult> RegisterUserAsync(RegisterRequest request)
+        public async Task<AuthenticationResult> RegisterAsync(RegisterRequest register)
+        {
+            var result = await RegisterUserAsync(register);
+
+            foreach (var address in register.Addresses)
+            {
+                if (address.ContactIsSameAsUser)
+                {
+                    address.ContactPerson = register.FirstName + " " + register.LastName;
+                    address.ContactNumber = register.PhoneNumber;
+                }
+
+                await _addressComponent.CreateAddressAsync(address, result.TokenResponse.UserId);
+            }
+
+            _logger.LogInformation($"User {register.Email} has been registered.");
+
+            return result;
+        }
+        private async Task<AuthenticationResult> RegisterUserAsync(RegisterRequest request)
         {
             var existing = await _userManager.FindByEmailAsync(request.Email);
             if (existing != null)
