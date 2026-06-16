@@ -6,7 +6,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
     {
         Task<AuthenticationResult> LoginAsync(string username, string password);
         Task<bool> ConfirmEmailAsync(Guid userId, string token);
-        Task<bool> ResetNewPassword(string username, string token, string newPassword);
+        Task<bool> ChangeNewPassword(string username, string token, string newPassword);
         Task<AuthenticationResult> ResetPassword(string username);
         Task LogoutAsync(string jti, string exp);
         Task<AuthenticationResult> RegisterAsync(RegisterRequest register);
