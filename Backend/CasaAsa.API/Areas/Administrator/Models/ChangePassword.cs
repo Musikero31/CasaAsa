@@ -2,7 +2,7 @@
 
 namespace CasaAsa.API.Areas.Administrator.Models
 {
-    public class ResetPassword
+    public class ChangePassword
     {
         [Required]
         [EmailAddress]

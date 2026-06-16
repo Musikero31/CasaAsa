@@ -172,7 +172,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             return result.Succeeded;
         }
 
-        public async Task<bool> ResetNewPassword(string username, string token, string newPassword)
+        public async Task<bool> ChangeNewPassword(string username, string token, string newPassword)
         {
             var user = await _userManager.FindByEmailAsync(username)
                        ?? throw new ArgumentNullException("User not found");
@@ -183,9 +183,9 @@ namespace CasaAsa.Business.Component.Administration.Authentication
 
             if (!result.Succeeded)
             {
-                _logger.LogError("Reset password error", result.Errors);
+                _logger.LogError("Change password error", result.Errors);
 
-                throw new ArgumentException("Reset password errors", new Exception(string.Join("; ", result.Errors)));
+                throw new ArgumentException("Change password errors", new Exception(string.Join("; ", result.Errors)));
             }
 
             _logger.LogInformation($"User {user.UserName} is confirmed.");

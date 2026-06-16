@@ -6,7 +6,6 @@ using CasaAsa.Business.Constants;
 using CasaAsa.Core.BusinessModels.Authentication;
 using CasaAsa.Core.Configuration;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -99,7 +98,7 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         {
             var result = await _authService.ResetPassword(username);
 
-            var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/api/Admin/NewPassword?userId={result.TokenResponse.UserId}&token={result.TokenResponse.Token}";
+            var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/api/Admin/ChangePassword?userId={result.TokenResponse.UserId}&token={result.TokenResponse.Token}";
 
             var mailParameters = new TemplateFields
             {
@@ -133,9 +132,9 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> NewPassword([FromBody] ResetPassword model)
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePassword model)
         {
-            var result = await _authService.ResetNewPassword(model.Username, model.ResetPasswordToken, model.NewPassword);
+            var result = await _authService.ChangeNewPassword(model.Username, model.ResetPasswordToken, model.NewPassword);
 
             if (!result)
             {
