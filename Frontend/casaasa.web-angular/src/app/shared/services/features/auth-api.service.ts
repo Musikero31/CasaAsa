@@ -10,26 +10,37 @@ import { ChangePasswordModel } from "../../../models/authentication/changePasswo
 })
 export class AuthApiService {
     constructor() { }
+    private readonly _baseUrl = "https://localhost:7218";
 
     private _http = inject(HttpClient)
 
     login(username: string, password: string) : Observable<AuthResponseModel> {
-        return this._http.post<AuthResponseModel>('/api/auth/login', { username, password });
+        var loginData = {
+            username: username,
+            password: password
+        };
+
+        return this._http.post<AuthResponseModel>(`${this._baseUrl}/api/auth/login`, 
+            loginData, { withCredentials: true });
     }
 
     logout() : Observable<string> {
-        return this._http.post<string>('/api/auth/logout', {});
+        return this._http.post<string>(`${this._baseUrl}/api/auth/logout`, {}, 
+            { withCredentials: true });
     }
 
     register(customer: CustomerModel) : Observable<AuthResponseModel> {
-        return this._http.post<AuthResponseModel>('/api/auth/register', customer);
+        return this._http.post<AuthResponseModel>(`${this._baseUrl}/api/auth/register`, 
+            customer, { withCredentials: true });
     }
 
     resetPassword(email: string) : Observable<AuthResponseModel> {
-        return this._http.post<AuthResponseModel>('/api/auth/reset-password', { email });
+        return this._http.post<AuthResponseModel>(`${this._baseUrl}/api/auth/reset-password`, 
+            { email }, { withCredentials: true });
     }
 
     changePassword(changePasswordModel: ChangePasswordModel) : Observable<string> {
-        return this._http.post<string>('/api/auth/change-password', changePasswordModel);
+        return this._http.post<string>(`${this._baseUrl}/api/auth/change-password`, 
+            changePasswordModel, { withCredentials: true });
     }
 }
