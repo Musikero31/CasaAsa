@@ -1,7 +1,70 @@
+<header class="p-3 mb-3 border-bottom">
+  <div class="header container-fluid">
+    <!-- <div class="row">
+      <div class="col-12">
+        <h1>{{ title() }}</h1>
+      </div>
+    </div> -->
+    <!-- Base Master Page
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <asp:Image
+            runat="server"
+            CssClass="pull-left"
+            Width="50"
+            Height="50"
+            ImageUrl="~/Content/img/Logo.jpg"
+          />
+          <a class="navbar-brand" href="#"><b>Casa Asa</b></a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <asp:HyperLink
+              runat="server"
+              CssClass="nav-link active"
+              NavigateUrl="~/Pages/Landing.aspx"
+              >Home</asp:HyperLink
+            >
+          </li>
+        </ul>
+        <ul class="nav navbar-nav">
+          <li>
+            <asp:HyperLink
+              runat="server"
+              CssClass="nav-link"
+              NavigateUrl="~/Pages/Customer/OrderForm.aspx"
+              >Menu</asp:HyperLink
+            >
+          </li>
+        </ul>
+        <ul class="nav navbar-nav pull-right">
+          <li>
+            <asp:HyperLink
+              ID="RegLog"
+              CssClass="nav-link"
+              NavigateUrl="~/Pages/Login.aspx"
+              runat="server"
+              >Login</asp:HyperLink
+            >
+            <asp:LinkButton
+              ID="Logout"
+              Visible="false"
+              OnClick="Logout_Click"
+              CssClass="nav-link"
+              runat="server"
+              >Logout</asp:LinkButton
+            >
+          </li>
+        </ul>
+      </div>
+    </nav> -->
+  </div>
+</header>
 <main class="main">
   <div class="content container-fluid">
     <div class="row">
       <router-outlet></router-outlet>
-    </div>    
+    </div>
   </div>
 </main>
