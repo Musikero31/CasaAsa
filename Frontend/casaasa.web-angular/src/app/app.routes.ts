@@ -42,11 +42,6 @@ export const routes: Routes = [
         ]
     },
     {
-        path: 'register',
-        component: Register,
-        pathMatch: 'full'
-    },
-    {
         path: 'forgot-password',
         component: ForgotPassword,
         pathMatch: 'full'

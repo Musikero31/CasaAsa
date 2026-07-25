@@ -25,13 +25,18 @@ main {
     color: #FFFFFF;
 }
 
-.btn-casa-outline, .btn-casa:hover {
-    border-color: #907B4E;
+.btn-casa:hover {
+    background-color: #75613D;
+    color: #FFFFFF;
+}
+
+.btn-casa-outline {
+    border: 1px solid #907B4E;
     color: #907B4E;
+    background-color: transparent;
 }
 
 .btn-casa-outline:hover {
-    border-color: #645636;
-    background-color: #b1a283;
+    background-color: #75613D;
     color: #FFFFFF;
 }
