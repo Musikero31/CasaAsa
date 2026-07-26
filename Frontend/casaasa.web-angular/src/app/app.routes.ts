@@ -8,6 +8,7 @@ import { ForgotPassword } from './features/auth/forgot-password/forgot-password'
 import { adminGuard } from './core/guards/admin.guard';
 import { customerGuard } from './core/guards/customer.guard';
 import { Register } from './features/auth/register/register';
+import { Confirmation } from './features/auth/confirmation/confirmation';
 
 export const routes: Routes = [
     {
@@ -23,6 +24,11 @@ export const routes: Routes = [
     {
         path: 'register',
         component: Register,
+        pathMatch: 'full'
+    },
+    {
+        path: "confirm",
+        component: Confirmation,
         pathMatch: 'full'
     },
     {

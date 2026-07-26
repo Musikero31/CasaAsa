@@ -22,18 +22,21 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         private readonly IMailComponent _mailComponent;
         private readonly IHtmlParser _htmlParser;
         private readonly IWebHostEnvironment _webEnv;
+        private readonly IConfiguration _configuration;
 
         public AuthController(IAuthenticationService authService,
                               IMapper mapper,
                               IMailComponent mailComponent,
                               IHtmlParser htmlParser,
-                              IWebHostEnvironment webEnv)
+                              IWebHostEnvironment webEnv,
+                              IConfiguration configuration)
         {
             _authService = authService;
             _mapper = mapper;
             _mailComponent = mailComponent;
             _htmlParser = htmlParser;
             _webEnv = webEnv;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -43,10 +46,21 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             var register = _mapper.Map<RegisterRequest>(model);
             var result = await _authService.RegisterAsync(register);
 
+            if (!result.Succeeded)
+            {
+                return BadRequest(new
+                {
+                    Succeed = false,
+                    result.Errors
+                });
+            }
+
             var response = PrepareLoginResponse(result);
 
             // Retrieve the template
-            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/auth/Confirm?userId={result.TokenResponse!.UserId}&token={result.TokenResponse.Token}";
+            var baseUrl = _configuration["Frontend:BaseUrl"];
+
+            var confirmationLink = $"{baseUrl}/confirm?userId={result.TokenResponse!.UserId}&token={result.TokenResponse.Token}";
             var mailParameters = new TemplateFields
             {
                 FullName = result.FullName!,
@@ -86,18 +100,35 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Confirm(Guid userId, string token)
+        public async Task<IActionResult> Confirm([FromBody] ConfirmUserViewModel model)
         {
-            var result = await _authService.ConfirmEmailAsync(userId, token);
-
-            if (!result)
+            if (model.UserId == Guid.Empty || string.IsNullOrEmpty(model.Token))
             {
-                return BadRequest("This confirmation link has expired. Please ask the admin to assist you and request for a new one.");
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "User Id or Token is empty"
+                });
             }
 
-            return Ok();
+            var result = await _authService.ConfirmEmailAsync(model.UserId, model.Token);
+
+            if (!result.success)
+            {
+                return BadRequest(new
+                {
+                    result.success,
+                    result.message
+                });
+            }
+
+            return Ok(new
+            {
+                result.success,
+                result.message
+            });
         }
 
         [HttpPost]

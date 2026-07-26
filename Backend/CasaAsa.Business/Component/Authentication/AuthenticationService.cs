@@ -37,6 +37,11 @@ namespace CasaAsa.Business.Component.Administration.Authentication
         {
             var result = await RegisterUserAsync(register);
 
+            if (result.TokenResponse == null)
+            {
+                return result;
+            }
+
             foreach (var address in register.Addresses)
             {
                 if (address.ContactIsSameAsUser)
@@ -151,7 +156,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             };
         }
 
-        public async Task<bool> ConfirmEmailAsync(Guid userId, string token)
+        public async Task<(bool success, string message)> ConfirmEmailAsync(Guid userId, string token)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString())
                        ?? throw new ArgumentNullException("User not found");
@@ -162,14 +167,15 @@ namespace CasaAsa.Business.Component.Administration.Authentication
 
             if (!result.Succeeded)
             {
-                _logger.LogError("Confirmation error", result.Errors);
+                var errorDescriptions = string.Join("; ", result.Errors.Select(e => e.Description));
+                _logger.LogError("Confirmation error: {ErrorDescriptions}", errorDescriptions);
 
-                throw new ArgumentException("Confirmation errors", new Exception(string.Join("; ", result.Errors)));
+                return (success: false, message: $"Confirmation error: {errorDescriptions}");
             }
 
-            _logger.LogInformation($"User {user.UserName} is confirmed.");
+            _logger.LogInformation("User {UserName} is confirmed.", user.UserName);
 
-            return result.Succeeded;
+            return (success: true, message: "Welcome to Casa Asa. You can now login.");
         }
 
         public async Task<bool> ChangeNewPassword(string username, string token, string newPassword)
@@ -183,7 +189,8 @@ namespace CasaAsa.Business.Component.Administration.Authentication
 
             if (!result.Succeeded)
             {
-                _logger.LogError("Change password error", result.Errors);
+                var errorDescriptions = string.Join("; ", result.Errors.Select(e => e.Description));
+                _logger.LogError("Change password error: {ErrorDescriptions}", errorDescriptions);
 
                 throw new ArgumentException("Change password errors", new Exception(string.Join("; ", result.Errors)));
             }

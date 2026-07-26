@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { CurrentUserModel } from "../../models/authentication/currentUser.model";
 import { ChangePasswordModel } from "../../models/authentication/changePassword.model";
 import { environment } from "../../../../environments/environment";
+import { ConfirmUserModel } from "../../models/authentication/confirmUser.model";
 
 // Manages the calls to the authentication API
 @Injectable({
@@ -43,6 +44,11 @@ export class AuthApiService {
     changePassword(changePasswordModel: ChangePasswordModel) : Observable<string> {
         return this._http.post<string>(`${this._baseUrl}/auth/ChangePassword`, 
             changePasswordModel);
+    }
+
+    confirmEmail(confirmUserModel: ConfirmUserModel) : Observable<{success: boolean, message: string}> {
+        return this._http.post<{success: boolean, message: string}>(`${this._baseUrl}/auth/Confirm`, 
+            confirmUserModel);
     }
 
     loadCurrentUser(): Observable<CurrentUserModel> {

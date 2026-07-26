@@ -5,7 +5,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
     public interface IAuthenticationService
     {
         Task<AuthenticationResult> LoginAsync(string username, string password);
-        Task<bool> ConfirmEmailAsync(Guid userId, string token);
+        Task<(bool success, string message)> ConfirmEmailAsync(Guid userId, string token);
         Task<bool> ChangeNewPassword(string username, string token, string newPassword);
         Task<AuthenticationResult> ResetPassword(string username);
         Task LogoutAsync(string jti, string exp);
