@@ -46,7 +46,7 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             var response = PrepareLoginResponse(result);
 
             // Retrieve the template
-            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/Admin/Confirm?userId={result.TokenResponse!.UserId}&token={result.TokenResponse.Token}";
+            var confirmationLink = $"{Request.Scheme}://{Request.Host}/api/auth/Confirm?userId={result.TokenResponse!.UserId}&token={result.TokenResponse.Token}";
             var mailParameters = new TemplateFields
             {
                 FullName = result.FullName!,
