@@ -1,6 +1,4 @@
-﻿using System.Security.Principal;
-
-namespace CasaAsa.Data.Models
+﻿namespace CasaAsa.Data.Entities
 {
     public class MenuDetail : IAuditEntity
     {

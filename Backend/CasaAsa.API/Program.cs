@@ -4,7 +4,7 @@ using CasaAsa.Business.Component.Administration.Authentication;
 using CasaAsa.Business.Component.Configuration;
 using CasaAsa.Business.Profiles;
 using CasaAsa.Data.Database;
-using CasaAsa.Data.Models;
+using CasaAsa.Data.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;

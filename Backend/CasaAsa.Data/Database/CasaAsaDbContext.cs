@@ -1,5 +1,5 @@
 ﻿using CasaAsa.Core.Abstraction;
-using CasaAsa.Data.Models;
+using CasaAsa.Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

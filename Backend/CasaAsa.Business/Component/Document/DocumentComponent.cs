@@ -3,7 +3,7 @@ using CasaAsa.Business.Constants;
 using CasaAsa.Data.Repository;
 using Microsoft.Extensions.Logging;
 using CoreModel = CasaAsa.Core.BusinessModels;
-using DataModel = CasaAsa.Data.Models;
+using DataModel = CasaAsa.Data.Entities;
 
 namespace CasaAsa.Business.Component.Document
 {

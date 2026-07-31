@@ -1,5 +1,5 @@
 ﻿using CasaAsa.Data.Database;
-using CasaAsa.Data.Models;
+using CasaAsa.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

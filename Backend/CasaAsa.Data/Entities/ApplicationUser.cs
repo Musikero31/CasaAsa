@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CasaAsa.Data.Models
+namespace CasaAsa.Data.Entities
 {
     public class ApplicationUser : IdentityUser<Guid>
     {

@@ -1,5 +1,4 @@
-﻿using CasaAsa.Data.Database;
-using CasaAsa.Data.Models;
+﻿using CasaAsa.Data.Entities;
 using CasaAsa.Data.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;

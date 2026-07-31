@@ -1,4 +1,4 @@
-﻿using CasaAsa.Data.Models;
+﻿using CasaAsa.Data.Entities;
 using CasaAsa.Data.Repository;
 
 namespace CasaAsa.Business.Component.Configuration

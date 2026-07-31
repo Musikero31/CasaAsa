@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CasaAsa.Business.Component.Configuration;
 using CoreModel = CasaAsa.Core.BusinessModels;
-using DataModel = CasaAsa.Data.Models;
+using DataModel = CasaAsa.Data.Entities;
 
 namespace CasaAsa.Business.Profiles
 {

@@ -1,4 +1,4 @@
-﻿namespace CasaAsa.Data.Models
+﻿namespace CasaAsa.Data.Entities
 {
     public class MenuCategory : IAuditEntity
     {

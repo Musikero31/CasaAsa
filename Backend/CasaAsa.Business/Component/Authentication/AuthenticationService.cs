@@ -1,5 +1,5 @@
 ﻿using CasaAsa.Core.BusinessModels.Authentication;
-using CasaAsa.Data.Models;
+using CasaAsa.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;

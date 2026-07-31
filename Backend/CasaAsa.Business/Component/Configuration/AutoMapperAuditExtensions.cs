@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CasaAsa.Data.Models;
+using CasaAsa.Data.Entities;
 
 namespace CasaAsa.Business.Component.Configuration
 {

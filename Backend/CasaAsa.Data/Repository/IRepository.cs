@@ -1,4 +1,4 @@
-﻿using CasaAsa.Data.Models;
+﻿using CasaAsa.Data.Entities;
 using System.Linq.Expressions;
 
 namespace CasaAsa.Data.Repository

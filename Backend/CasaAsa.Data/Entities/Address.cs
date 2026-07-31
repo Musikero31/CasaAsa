@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace CasaAsa.Data.Models
+﻿namespace CasaAsa.Data.Entities
 {
     public class Address : IAuditEntity
     {

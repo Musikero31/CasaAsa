@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace CasaAsa.Data.Models
+namespace CasaAsa.Data.Entities
 {
     public class ApplicationRole : IdentityRole<Guid>
     {

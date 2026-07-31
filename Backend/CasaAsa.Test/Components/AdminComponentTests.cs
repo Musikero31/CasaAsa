@@ -1,11 +1,9 @@
 ﻿using CasaAsa.Data.Repository;
-using DataModel = CasaAsa.Data.Models;
-using CoreModel = CasaAsa.Core.BusinessModels;
+using DataModel = CasaAsa.Data.Entities;
 using AutoMapper;
 using CasaAsa.Business.Component.Administration;
 using NSubstitute;
 using CasaAsa.Test.Mappings;
-using CasaAsa.Business.Component.Administration.Authentication;
 using Microsoft.Extensions.Logging;
 using FluentAssertions;
 
@@ -16,15 +14,11 @@ namespace CasaAsa.Test.Components
         private readonly IRepository<DataModel.LockOrder> _lockRepo;
         private readonly IMapper _mapper;
         private readonly IAdminComponent _adminComp;
-        private readonly IAuthenticationService _authSvc;
-        private readonly IAddressComponent _addressComp;
         private readonly ILogger<AdminComponent> _logger;
 
         public AdminComponentTests()
         {
             _lockRepo = Substitute.For<IRepository<DataModel.LockOrder>>();
-            _authSvc = Substitute.For<IAuthenticationService>();
-            _addressComp = Substitute.For<IAddressComponent>();
             _logger = Substitute.For<ILogger<AdminComponent>>();
 
             var mapping = new TestMappingProfiles();

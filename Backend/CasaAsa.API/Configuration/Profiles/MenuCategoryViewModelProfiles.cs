@@ -2,7 +2,7 @@
 using CasaAsa.API.Areas.Menu.Data;
 using CasaAsa.API.Areas.Menu.Models;
 using CasaAsa.Core.BusinessModels;
-using CasaAsa.Data.Models;
+using CasaAsa.Data.Entities;
 
 namespace CasaAsa.API.Configuration.Profiles
 {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DataModel = CasaAsa.Data.Models;
+using DataModel = CasaAsa.Data.Entities;
 using CoreModel = CasaAsa.Core.BusinessModels;
 using CasaAsa.Business.Component.Configuration;
 
