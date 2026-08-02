@@ -1,6 +1,6 @@
-export interface CurrentUserModel {
-    succeeded: boolean;
-    errors: string[];
+import { AuthenticationResponseModel } from "./authenticationResponse.model";
+
+export interface CurrentUserModel extends AuthenticationResponseModel{
     fullName: string;
     username: string;
     roles: string[];
