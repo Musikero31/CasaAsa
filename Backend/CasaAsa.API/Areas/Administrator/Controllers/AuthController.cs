@@ -48,10 +48,10 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest(new
+                return BadRequest(new AuthenticationResponse
                 {
-                    Succeed = false,
-                    result.Errors
+                    Success = false,
+                    Errors = result.Errors
                 });
             }
 
@@ -106,10 +106,10 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         {
             if (model.UserId == Guid.Empty || string.IsNullOrEmpty(model.Token))
             {
-                return BadRequest(new
+                return BadRequest(new AuthenticationResponse
                 {
-                    success = false,
-                    message = "User Id or Token is empty"
+                    Success = false,
+                    Errors = new List<string> { "User Id or Token is empty" }
                 });
             }
 
@@ -117,17 +117,17 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
             if (!result.success)
             {
-                return BadRequest(new
+                return BadRequest(new AuthenticationResponse
                 {
-                    result.success,
-                    result.message
+                    Success = result.success,
+                    Errors = new List<string>() { result.message}
                 });
             }
 
-            return Ok(new
+            return Ok(new AuthenticationResponse
             {
-                result.success,
-                result.message
+                Success = result.success,
+                Message = result.message
             });
         }
 
@@ -219,9 +219,9 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
                 userId = parsedUserId;
             }
 
-            return Ok(new LoginResponse
+            return Ok(new AuthenticationResponse
             {
-                Succeeded = true,
+                Success = true,
                 UserId = userId,
                 FullName = fullName,
                 Username = username,
@@ -229,7 +229,7 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             });
         }
 
-        private LoginResponse PrepareLoginResponse(AuthenticationResult result)
+        private AuthenticationResponse PrepareLoginResponse(AuthenticationResult result)
         {
             if (result.Succeeded)
             {
@@ -242,9 +242,9 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
                 });
             }
 
-            return new LoginResponse
+            return new AuthenticationResponse
             {
-                Succeeded = result.Succeeded,
+                Success = result.Succeeded,
                 UserId = result.TokenResponse?.UserId,
                 Username = result.TokenResponse?.Email,
                 FullName = result.FullName,

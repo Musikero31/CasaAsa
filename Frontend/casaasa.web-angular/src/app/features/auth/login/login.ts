@@ -47,7 +47,7 @@ export class Login implements OnInit {
     this._authApi.login(this.loginForm.value.username!, this.loginForm.value.password!)
       .pipe(
         switchMap(response => {
-          if (!response.succeeded) {
+          if (!response.success) {
             throw new Error(response.errors?.join(', '));
           }
 
@@ -59,7 +59,7 @@ export class Login implements OnInit {
       )
       .subscribe({
         next: (loggedUser) => {
-          if (loggedUser.succeeded) {
+          if (loggedUser.success) {
             this._authSvc.setCurrentUser(loggedUser);
             
             switch (true) {
@@ -71,17 +71,17 @@ export class Login implements OnInit {
                 break;
               default:
                 console.error('Login failed', loggedUser.errors);
-                alert('Login failed: ' + loggedUser.errors?.join(', '));
+                this._notificationSvc.showMessage('An error occurred while trying to login.');
             }
           }
           else {
             console.error('Login failed', loggedUser.errors);
-            alert('Login failed: ' + loggedUser.errors?.join(', '));
+            this._notificationSvc.showMessage('An error occurred while trying to login.');
           }
         },
         error: (err) => {
           console.error('Login request error', err);
-          alert('An error occurred while trying to login.');
+          this._notificationSvc.showMessage('An error occurred while trying to login.');
         }
       });
   }

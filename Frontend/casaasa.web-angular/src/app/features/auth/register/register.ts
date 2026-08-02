@@ -8,6 +8,7 @@ import { AddressModel } from '../../../shared/models/address.model';
 import { CustomerModel } from '../../../shared/models/customer.model';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { USStatesService } from '../../../core/services/us-states.service';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'casa-register',
@@ -20,6 +21,7 @@ export class Register {
   private _authApi = inject(AuthApiService)
   private _router = inject(Router);
   private _usStatesService = inject(USStatesService);
+  private _notificationSvc = inject(NotificationService);
 
   states = this._usStatesService.getStates();
 
@@ -77,19 +79,19 @@ export class Register {
         .subscribe({
           next: (registeredUser) => {
             // Handle successful registration
-            if (registeredUser.succeeded) {
+            if (registeredUser.success) {
               // Show that the registration was successful, and check email for confirmation
-              alert('Registration successful! Please check your email for confirmation.');
+              this._notificationSvc.showMessage('Registration successful! Please check your email for confirmation.');
               this._router.navigate(['/login']);
             }
             else {
               console.error('Registration failed', registeredUser.errors);
-              alert('Registration failed: ' + registeredUser.errors?.join(', '));
+              this._notificationSvc.showMessage('An error occurred while trying to register.');
             }
           },
           error: (error: Error) => {
             console.error('Registration request error', error);
-            alert('An error occurred while trying to register.');
+            this._notificationSvc.showMessage('An error occurred while trying to register.');
           }
         })
     }
@@ -107,7 +109,8 @@ export class Register {
         this.registerForm.get("contactPerson")?.setValue(this.registerForm.get("firstName")?.value + " " + this.registerForm.get("lastName")?.value);
         this.registerForm.get('contactNumber')?.disable();
         this.registerForm.get("contactPerson")?.disable();
-      } else {
+      } 
+      else {
         this.registerForm.get('contactNumber')?.enable();
         this.registerForm.get("contactPerson")?.enable();
       }
