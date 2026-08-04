@@ -43,27 +43,10 @@
                                         placeholder="Email Address">
                                 </div>
 
-                                <!-- Convert this to use the password component instead of duplicating the code for password and confirm password fields. -->
-                                <!-- BEGIN -->
-                                <div class="mb-3">
-                                    <label class="form-label">Password</label>
-                                    <input
-                                        type="password"
-                                        class="form-control"
-                                        formControlName="password"
-                                        placeholder="Password">
-                                </div>
+                                <password-component
+                                    formControlName="passwordInfo">
+                                </password-component>
 
-                                <div class="mb-3">
-                                    <label class="form-label">Confirm Password</label>
-                                    <input
-                                        type="password"
-                                        class="form-control"
-                                        formControlName="confirmPassword"
-                                        placeholder="Confirm Password">
-                                </div>
-                                <!-- END -->
-                                 
                                 <div class="mb-3">
                                     <label class="form-label">Phone Number</label>
                                     <input

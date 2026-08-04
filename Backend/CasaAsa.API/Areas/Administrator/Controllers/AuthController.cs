@@ -120,7 +120,7 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
                 return BadRequest(new AuthenticationResponse
                 {
                     Success = result.success,
-                    Errors = new List<string>() { result.message}
+                    Errors = new List<string>() { result.message }
                 });
             }
 
@@ -133,54 +133,89 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> ResetPassword([FromBody] string username)
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordViewModel forgotPassword)
         {
-            var result = await _authService.ResetPassword(username);
-
-            var resetPasswordLink = $"{Request.Scheme}://{Request.Host}/api/Admin/ChangePassword?userId={result.TokenResponse!.UserId}&token={result.TokenResponse.Token}";
-
-            var mailParameters = new TemplateFields
+            if (string.IsNullOrEmpty(forgotPassword.Username))
             {
-                FullName = result.FullName!,
-                Username = result.TokenResponse.Email,
-                OtherParameters = new Dictionary<string, string>
+                return BadRequest(new AuthenticationResponse
                 {
-                    { "ExpirationTime", "24 hours" },
-                    { "ResetPasswordLink", resetPasswordLink }
-                }
-            };
+                    Success = false,
+                    Errors = new List<string> { "Username is empty" }
+                });
+            }
 
-            var email = await _htmlParser.ParseByReportTypeAsync(mailParameters,
-                                                                 ApplicationSettingsKeys.RESET_PASSWORD_TEMPLATE);
+            var result = await _authService.ForgotPassword(forgotPassword.Username);
 
-            // Send the mail here
-            var mail = new Mail
+            if (!result.Succeeded)
             {
-                FromEmail = "casa.asa@sarapfoods.com",
-                SenderName = "Casa Asa Admin",
-                ReceiverName = result.FullName!,
-                ToEmail = result.TokenResponse.Email,
-                Subject = "Confirm User",
-                Body = email
-            };
+                return BadRequest(new AuthenticationResponse
+                {
+                    Success = false,
+                    Errors = result.Errors
+                });
+            }
 
-            _mailComponent.SendMail(mail);
+            if (result.TokenResponse != null)
+            {
+                var baseUrl = _configuration["Frontend:BaseUrl"];
 
-            return Ok(result);
+                var changePasswordLink = $"{baseUrl}/change-password?userId={result.TokenResponse!.UserId}&token={result.TokenResponse.Token}";
+
+                var mailParameters = new TemplateFields
+                {
+                    FullName = result.FullName!,
+                    Username = result.TokenResponse.Email,
+                    OtherParameters = new Dictionary<string, string>
+                    {
+                        { "ExpirationTime", "24 hours" },
+                        { "ChangePasswordLink", changePasswordLink }
+                    }
+                };
+
+                var email = await _htmlParser.ParseByReportTypeAsync(mailParameters,
+                                                                     ApplicationSettingsKeys.RESET_PASSWORD_TEMPLATE);
+
+                // Send the mail here
+                var mail = new Mail
+                {
+                    FromEmail = "casa.asa@sarapfoods.com",
+                    SenderName = "Casa Asa Admin",
+                    ReceiverName = result.FullName!,
+                    ToEmail = result.TokenResponse.Email,
+                    Subject = "Change Password",
+                    Body = email
+                };
+
+                _mailComponent.SendMail(mail);
+            }
+
+            return Ok(new AuthenticationResponse
+            {
+                Success = true,
+                Message = "If an account exists for that username, a password reset link has been sent."
+            });
         }
 
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePassword model)
         {
-            var result = await _authService.ChangeNewPassword(model.Username, model.ResetPasswordToken, model.NewPassword);
+            var result = await _authService.ChangeNewPassword(model.UserId, model.Token, model.NewPassword);
 
-            if (!result)
+            if (!result.success)
             {
-                return BadRequest("Please ask the admin to assist you and request for a new one.");
+                return BadRequest(new AuthenticationResponse
+                {
+                    Success = result.success,
+                    Errors = new List<string>() { result.message }
+                });
             }
 
-            return Ok();
+            return Ok(new AuthenticationResponse
+            {
+                Success = result.success,
+                Message = result.message
+            });
         }
 
         [HttpPost]
@@ -198,7 +233,11 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             Response.Cookies.Delete("accessToken");
             await _authService.LogoutAsync(jti, exp);
 
-            return Ok("Logged out successfully");
+            return Ok(new AuthenticationResponse
+            {
+                Success = true,
+                Message = "Logged out successfully"
+            });
         }
 
         [HttpGet]
