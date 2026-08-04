@@ -126,7 +126,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 };
             }
 
-            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: false);
+            var signInResult = await _signInManager.PasswordSignInAsync(user, password, isPersistent: false, lockoutOnFailure: true);
             if (!signInResult.Succeeded)
             {
                 return new AuthenticationResult
@@ -158,8 +158,13 @@ namespace CasaAsa.Business.Component.Administration.Authentication
 
         public async Task<(bool success, string message)> ConfirmEmailAsync(Guid userId, string token)
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString())
-                       ?? throw new ArgumentNullException("User not found");
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                _logger.LogError("User not found. UserId: {userId}", userId.ToString());
+                return (success: false, message: "User not found.");
+            }
 
             var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
 
@@ -178,12 +183,41 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             return (success: true, message: "Welcome to Casa Asa. You can now login.");
         }
 
-        public async Task<bool> ChangeNewPassword(string username, string token, string newPassword)
+        public async Task<(bool success, string message)> ChangeNewPassword(Guid userId, string token, string newPassword)
         {
-            var user = await _userManager.FindByEmailAsync(username)
-                       ?? throw new ArgumentNullException("User not found");
+            var user = await _userManager.FindByIdAsync(userId.ToString());
 
-            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+            if (user == null)
+            {
+                _logger.LogError("User not found. UserId: {userId}", userId.ToString());
+                return (success: false, message: "User not found.");
+            }
+
+            // Check if the new password is the same as the one in the table
+            var isSamePassword = await _userManager.CheckPasswordAsync(user, newPassword);
+
+            if (isSamePassword)
+            {
+                _logger.LogError("New password is the same as the current password.");
+                return (success: false, message: "New password is the same as the current password.");
+            }
+
+            string decodedToken;
+
+            try
+            {
+                decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+            }
+            catch (FormatException ex)
+            {
+                _logger.LogError(ex, "The password reset link is invalid or has expired.");
+
+                return (success: false, message: "The password reset link is invalid or has expired.");
+            }
+
+            // Update access failed count and access failed count
+            user.AccessFailedCount = 0;
+            user.LockoutEnd = null;
 
             var result = await _userManager.ResetPasswordAsync(user, decodedToken, newPassword);
 
@@ -192,22 +226,33 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 var errorDescriptions = string.Join("; ", result.Errors.Select(e => e.Description));
                 _logger.LogError("Change password error: {ErrorDescriptions}", errorDescriptions);
 
-                throw new ArgumentException("Change password errors", new Exception(string.Join("; ", result.Errors)));
+                return (success: false, message: $"Change password errors {errorDescriptions}");
             }
 
-            _logger.LogInformation($"User {user.UserName} is confirmed.");
+            _logger.LogInformation("User {Username} has changed password.", user.UserName);
 
-            return result.Succeeded;
+            return (success: result.Succeeded, message: $"User {user.UserName} has changed password.");
         }
 
-        public async Task<AuthenticationResult> ResetPassword(string username)
+        public async Task<AuthenticationResult> ForgotPassword(string username)
         {
-            var user = await _userManager.FindByEmailAsync(username)
-                       ?? throw new ArgumentNullException("User not found");
+            var user = await _userManager.FindByEmailAsync(username);
+
+            if (user == null)
+            {
+                _logger.LogWarning("Password reset requested for unknown username.");
+
+                return new AuthenticationResult
+                {
+                    Succeeded = true,
+                    Errors = []
+                };
+            }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var encodedToken = WebEncoders.Base64UrlEncode(
+                Encoding.UTF8.GetBytes(token));
 
             var tokenResponse = new AuthenticationToken
             {
@@ -221,7 +266,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 TokenResponse = tokenResponse,
                 Succeeded = true,
                 Errors = [],
-                FullName = user.FullName,
+                FullName = user.FullName
             };
         }
 

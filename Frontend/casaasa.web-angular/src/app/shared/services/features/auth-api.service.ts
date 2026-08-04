@@ -28,8 +28,8 @@ export class AuthApiService {
             loginData);
     }
 
-    logout() : Observable<string> {
-        return this._http.post<string>(`${this._baseUrl}/auth/logout`, {});
+    logout() : Observable<AuthenticationResponseModel> {
+        return this._http.post<AuthenticationResponseModel>(`${this._baseUrl}/auth/logout`, {});
     }
 
     register(customer: CustomerModel) : Observable<CurrentUserModel> {
@@ -37,13 +37,15 @@ export class AuthApiService {
             customer);
     }
 
-    resetPassword(email: string) : Observable<CurrentUserModel> {
-        return this._http.post<CurrentUserModel >(`${this._baseUrl}/auth/ResetPassword`, 
-            { email });
+    forgotPassword(email: string) : Observable<AuthenticationResponseModel> {
+        const forgotPasswordData = { username: email };
+
+        return this._http.post<AuthenticationResponseModel>(`${this._baseUrl}/auth/ForgotPassword`, 
+            forgotPasswordData);
     }
 
-    changePassword(changePasswordModel: ChangePasswordModel) : Observable<string> {
-        return this._http.post<string>(`${this._baseUrl}/auth/ChangePassword`, 
+    changePassword(changePasswordModel: ChangePasswordModel) : Observable<AuthenticationResponseModel> {
+        return this._http.post<AuthenticationResponseModel>(`${this._baseUrl}/auth/ChangePassword`, 
             changePasswordModel);
     }
 

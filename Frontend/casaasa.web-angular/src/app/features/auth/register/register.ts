@@ -2,17 +2,18 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthApiService } from '../../../shared/services/features/auth-api.service';
-import { passwordsShouldBeSame } from '../../../shared/validators/passwords-should-be-same.validator';
 import { shouldBeNumeric } from '../../../shared/validators/should-be-numeric.validator';
 import { AddressModel } from '../../../shared/models/address.model';
 import { CustomerModel } from '../../../shared/models/customer.model';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { USStatesService } from '../../../core/services/us-states.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { PasswordComponent, PasswordInfo } from '../../../shared/components/password-component/password-component';
 
 @Component({
   selector: 'casa-register',
-  imports: [RouterLink, ReactiveFormsModule, NgSelectComponent],
+  imports: [RouterLink, ReactiveFormsModule, 
+    NgSelectComponent, PasswordComponent],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
@@ -29,8 +30,7 @@ export class Register {
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
     username: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
+    passwordInfo: this._formBuilder.control<PasswordInfo | null>(null),
     phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     isContactSameAsUser: [false],
     addressLine1: ['', [Validators.required]],
@@ -41,8 +41,6 @@ export class Register {
     zipCode: ['', [Validators.required, shouldBeNumeric(), Validators.minLength(5), Validators.maxLength(10)]],
     contactPerson: ['', [Validators.required]],
     contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
-  }, {
-    validators: [passwordsShouldBeSame()]
   });
 
   register() {
@@ -69,7 +67,7 @@ export class Register {
         firstName: this.registerForm.get('firstName')?.value as string,
         lastName: this.registerForm.get('lastName')?.value as string,
         username: this.registerForm.get('username')?.value as string,
-        password: this.registerForm.get('password')?.value as string,
+        password: this.registerForm.controls.passwordInfo.value?.password ?? '',
         phoneNumber: this.registerForm.get('phoneNumber')?.value as string,
         addresses: [address],
         userId: null

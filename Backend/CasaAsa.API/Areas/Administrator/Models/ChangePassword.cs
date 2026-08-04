@@ -5,11 +5,10 @@ namespace CasaAsa.API.Areas.Administrator.Models
     public class ChangePassword
     {
         [Required]
-        [EmailAddress]
-        public string Username { get; set; }
+        public required Guid UserId { get; set; }
         [Required]
-        public string NewPassword { get; set; }
+        public required string NewPassword { get; set; }
         [Required]
-        public string ResetPasswordToken { get; set; }
+        public required string Token { get; set; }
     }
 }
