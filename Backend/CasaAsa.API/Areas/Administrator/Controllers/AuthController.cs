@@ -46,11 +46,12 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             var register = _mapper.Map<RegisterRequest>(model);
             var result = await _authService.RegisterAsync(register);
 
-            if (!result.Succeeded)
+            if (!result.Success)
             {
                 return BadRequest(new AuthenticationResponse
                 {
                     Success = false,
+                    ErrorCode = result.ErrorCode,
                     Errors = result.Errors
                 });
             }
@@ -58,34 +59,36 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             var response = PrepareLoginResponse(result);
 
             // Retrieve the template
-            var baseUrl = _configuration["Frontend:BaseUrl"];
+            await SendConfirmationEmail(result, ApplicationSettingsKeys.CONFIRM_EMAIL_TEMPLATE);
 
-            var confirmationLink = $"{baseUrl}/confirm?userId={result.TokenResponse!.UserId}&token={result.TokenResponse.Token}";
-            var mailParameters = new TemplateFields
+            return Ok(response);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationViewModel model)
+        {
+            if (string.IsNullOrEmpty(model.Username))
             {
-                FullName = result.FullName!,
-                Username = result.TokenResponse.Email,
-                OtherParameters = new Dictionary<string, string>
+                return BadRequest();
+            }
+
+            var result = await _authService.ResendConfirmationEmail(model.Username);
+
+            if (!result.Success)
+            {
+                return BadRequest(new AuthenticationResponse
                 {
-                    { "ExpirationTime", "24 hours" },
-                    { "ConfirmationLink", confirmationLink }
-                }
-            };
+                    Success = result.Success,
+                    ErrorCode = result.ErrorCode,
+                    Errors = result.Errors
+                });
+            }
 
-            var email = await _htmlParser.ParseByReportTypeAsync(mailParameters, ApplicationSettingsKeys.CONFIRM_EMAIL_TEMPLATE);
+            var response = PrepareLoginResponse(result);
 
-            // Send the mail here
-            var mail = new Mail
-            {
-                FromEmail = "casa.asa@sarapfoods.com",
-                SenderName = "Casa Asa Admin",
-                ReceiverName = result.FullName!,
-                ToEmail = result.TokenResponse.Email,
-                Subject = "Confirm User",
-                Body = email
-            };
-
-            _mailComponent.SendMail(mail);
+            // Retrieve the template
+            await SendConfirmationEmail(result, ApplicationSettingsKeys.CONFIRM_EMAIL_TEMPLATE);
 
             return Ok(response);
         }
@@ -95,8 +98,29 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             var result = await _authService.LoginAsync(model.Username, model.Password);
-            var response = PrepareLoginResponse(result);
 
+            if (!result.Success)
+            {
+                if (result.ErrorCode == AuthErrorCodes.EMAIL_NOT_CONFIRMED)
+                {
+                    return Ok(new AuthenticationResponse
+                    {
+                        Success = result.Success,
+                        ErrorCode = result.ErrorCode,
+                        Errors = result.Errors
+                    });
+                }
+
+                return BadRequest(new AuthenticationResponse
+                {
+                    Success = result.Success,
+                    ErrorCode = result.ErrorCode,
+                    Errors = result.Errors
+                });
+            }
+
+            var response = PrepareLoginResponse(result);
+            
             return Ok(response);
         }
 
@@ -109,25 +133,27 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
                 return BadRequest(new AuthenticationResponse
                 {
                     Success = false,
-                    Errors = new List<string> { "User Id or Token is empty" }
+                    ErrorCode = AuthErrorCodes.MISSING_INFORMATION,
+                    Errors = ["User Id or Token is empty"]
                 });
             }
 
             var result = await _authService.ConfirmEmailAsync(model.UserId, model.Token);
 
-            if (!result.success)
+            if (!result.Success)
             {
                 return BadRequest(new AuthenticationResponse
                 {
-                    Success = result.success,
-                    Errors = new List<string>() { result.message }
+                    Success = result.Success,
+                    ErrorCode = result.ErrorCode,
+                    Errors = result.Errors
                 });
             }
 
             return Ok(new AuthenticationResponse
             {
-                Success = result.success,
-                Message = result.message
+                Success = result.Success,
+                Message = "Welcome to Casa Asa. You can now login."
             });
         }
 
@@ -140,13 +166,13 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
                 return BadRequest(new AuthenticationResponse
                 {
                     Success = false,
-                    Errors = new List<string> { "Username is empty" }
+                    Errors = [ "Username is empty" ]
                 });
             }
 
             var result = await _authService.ForgotPassword(forgotPassword.Username);
 
-            if (!result.Succeeded)
+            if (!result.Success)
             {
                 return BadRequest(new AuthenticationResponse
                 {
@@ -202,19 +228,20 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
         {
             var result = await _authService.ChangeNewPassword(model.UserId, model.Token, model.NewPassword);
 
-            if (!result.success)
+            if (!result.Success)
             {
                 return BadRequest(new AuthenticationResponse
                 {
-                    Success = result.success,
-                    Errors = new List<string>() { result.message }
+                    Success = result.Success,
+                    ErrorCode = result.ErrorCode,
+                    Errors = result.Errors
                 });
             }
 
             return Ok(new AuthenticationResponse
             {
-                Success = result.success,
-                Message = result.message
+                Success = result.Success,
+                Message = "Password has been changed. Please try to login"
             });
         }
 
@@ -270,12 +297,12 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
         private AuthenticationResponse PrepareLoginResponse(AuthenticationResult result)
         {
-            if (result.Succeeded)
+            if (result.Success)
             {
                 Response.Cookies.Append("accessToken", result.TokenResponse!.Token, new CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = true,
+                    Secure = true, 
                     SameSite = _webEnv.IsDevelopment() ? SameSiteMode.None : SameSiteMode.Strict,
                     Expires = DateTime.UtcNow.AddHours(1)
                 });
@@ -283,13 +310,46 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
 
             return new AuthenticationResponse
             {
-                Success = result.Succeeded,
+                Success = result.Success,
                 UserId = result.TokenResponse?.UserId,
                 Username = result.TokenResponse?.Email,
                 FullName = result.FullName,
                 Roles = result.TokenResponse?.Roles,
                 Errors = result.Errors,
+                ErrorCode = result.ErrorCode,
             };
+        }
+
+        private async Task SendConfirmationEmail(AuthenticationResult result, string appSettingKey)
+        {
+            var baseUrl = _configuration["Frontend:BaseUrl"];
+
+            var confirmationLink = $"{baseUrl}/confirm?userId={result.TokenResponse!.UserId}&token={result.TokenResponse.Token}";
+            var mailParameters = new TemplateFields
+            {
+                FullName = result.FullName!,
+                Username = result.TokenResponse.Email,
+                OtherParameters = new Dictionary<string, string>
+                {
+                    { "ExpirationTime", "24 hours" },
+                    { "ConfirmationLink", confirmationLink }
+                }
+            };
+
+            var email = await _htmlParser.ParseByReportTypeAsync(mailParameters, appSettingKey);
+
+            // Send the mail here
+            var mail = new Mail
+            {
+                FromEmail = "casa.asa@sarapfoods.com",
+                SenderName = "Casa Asa Admin",
+                ReceiverName = result.FullName!,
+                ToEmail = result.TokenResponse.Email,
+                Subject = "Confirm User",
+                Body = email
+            };
+
+            _mailComponent.SendMail(mail);
         }
 
     }

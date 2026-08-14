@@ -1,11 +1,11 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthApiService } from '../../../shared/services/features/auth-api.service';
 import { Router, RouterLink } from '@angular/router';
 import { AuthenticationService } from '../../../core/services/authentication.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { switchMap } from 'rxjs';
 import { NotificationService } from '../../../core/services/notification.service';
+import { AuthErrorCodes } from '../../../shared/enums/auth-error-codes.enum';
 
 @Component({
   selector: 'casa-login',
@@ -20,8 +20,11 @@ export class Login implements OnInit {
   private _destroyRef = inject(DestroyRef);
   private _notificationSvc = inject(NotificationService);
   private _authSvc = inject(AuthenticationService);
+  private _cdRef = inject(ChangeDetectorRef);
 
   message: string | null = null;
+
+  showResendConfirmation: boolean = false;
   
   loginForm = this._formBuilder.group({
     username: ['', [Validators.required, Validators.email]],
@@ -38,45 +41,46 @@ export class Login implements OnInit {
   login() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
-      // TODO: Display validation errors in a more user-friendly way
-      // TODO: Highlight invalid fields
-      alert("Errors: " + JSON.stringify(this.loginForm.errors));
+        // TODO: Display validation errors in a more user-friendly way
+        // TODO: Highlight invalid fields
+        alert("Errors: " + JSON.stringify(this.loginForm.errors));
       return;
     }
 
     this._authApi.login(this.loginForm.value.username!, this.loginForm.value.password!)
-      .pipe(
-        switchMap(response => {
-          if (!response.success) {
-            throw new Error(response.errors?.join(', '));
-          }
-
-          // Cookie has been set by the browser.
-          // Now ask the server who the current user is.
-          return this._authApi.loadCurrentUser();
-        }),
+      .pipe(        
         takeUntilDestroyed(this._destroyRef)
       )
       .subscribe({
         next: (loggedUser) => {
-          if (loggedUser.success) {
-            this._authSvc.setCurrentUser(loggedUser);
-            
-            switch (true) {
-              case loggedUser.roles.includes("Admin"):
-                this._router.navigate(['/admin']);
-                break;
-              case loggedUser.roles.includes("Customer"):
-                this._router.navigate(['/customer']);
-                break;
-              default:
-                console.error('Login failed', loggedUser.errors);
-                this._notificationSvc.showMessage('An error occurred while trying to login.');
+          if (!loggedUser.success) {
+            if (loggedUser.errorCode === AuthErrorCodes.EmailNotConfirmed) {
+              this.showResendConfirmation = true;
+              this._cdRef.detectChanges(); // Trigger change detection to update the view              
+              this._notificationSvc.showMessage('Your email is not confirmed. Please check your email for the confirmation link.');
             }
+            else {
+              console.error('Login failed:', loggedUser.errors);
+              this._notificationSvc.showMessage(loggedUser.message);
+            }
+
+            return;
           }
-          else {
-            console.error('Login failed', loggedUser.errors);
-            this._notificationSvc.showMessage('An error occurred while trying to login.');
+
+          this._authSvc.setCurrentUser(loggedUser);
+
+          switch(true)
+          {
+            case this._authSvc.roles().includes('Admin'):
+              this._router.navigate(['/admin/dashboard']);
+              break;
+            case this._authSvc.roles().includes('Customer'):
+              this._router.navigate(['/customer/dashboard']);
+              break;
+            default:
+              console.error('Unknown user role:', this._authSvc.roles());
+              this._notificationSvc.showMessage('An error occurred while trying to login.');
+              break;
           }
         },
         error: (err) => {
@@ -86,4 +90,30 @@ export class Login implements OnInit {
       });
   }
 
+  resendConfirmationEmail() {
+    let username = this.loginForm.value.username;
+    if (!username) {
+      this._notificationSvc.showMessage('Please enter your email address to resend the confirmation email.');
+      return;
+    }
+
+    this._authApi.resendConfirmationEmail(username)
+      .pipe(
+        takeUntilDestroyed(this._destroyRef)
+      )
+      .subscribe({
+        next: (response) => {
+          if (!response.success) {
+            console.error('Resend confirmation email failed:', response.errors);
+            this._notificationSvc.showMessage(response.message);
+            return;
+          }
+          this._notificationSvc.showMessage('Confirmation email has been resent successfully.');
+        },
+        error: (err) => {
+          console.error('Resend confirmation email error', err);
+          this._notificationSvc.showMessage('An error occurred while trying to resend the confirmation email.');
+        }
+      });
+  }
 }
