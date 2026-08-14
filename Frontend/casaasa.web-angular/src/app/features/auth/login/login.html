@@ -43,10 +43,25 @@
           </a>
         </div>
 
-        <button type="submit" class="btn btn-casa w-100">
+        <button type="submit" class="btn btn-casa w-100" [disabled]="showResendConfirmation">
           Sign In
-        </button>
+        </button>        
 
+        @if (showResendConfirmation) {
+          <div class="confirmation-message text-center">
+            <p>
+                Your email address has not been confirmed.
+                Please confirm your email before signing in.
+            </p>
+
+            <button
+                type="button"
+                class="btn btn-link d-block mx-auto"
+                (click)="resendConfirmationEmail()">
+                Resend confirmation email
+            </button>
+          </div>
+        }
       </form>
 
       <hr class="my-4">

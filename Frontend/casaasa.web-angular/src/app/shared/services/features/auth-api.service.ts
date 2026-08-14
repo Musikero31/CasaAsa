@@ -13,6 +13,7 @@ import { AuthenticationResponseModel } from "../../models/authentication/authent
     providedIn: 'root'
 })
 export class AuthApiService {
+    
     constructor() { }
     private readonly _baseUrl = environment.apiUrl;
 
@@ -52,6 +53,12 @@ export class AuthApiService {
     confirmEmail(confirmUserModel: ConfirmUserModel) : Observable<AuthenticationResponseModel> {
         return this._http.post<AuthenticationResponseModel>(`${this._baseUrl}/auth/Confirm`, 
             confirmUserModel);
+    }
+
+    resendConfirmationEmail(username: string) : Observable<AuthenticationResponseModel> {
+        const resendData = { username: username };
+        return this._http.post<AuthenticationResponseModel>(`${this._baseUrl}/auth/ResendConfirmationEmail`, 
+            resendData);
     }
 
     loadCurrentUser(): Observable<CurrentUserModel> {

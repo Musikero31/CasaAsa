@@ -42,7 +42,7 @@ export const routes: Routes = [
         component: AppAdmin,
         canMatch: [adminGuard],
         children: [
-            { path: '', component: DashboardAdmin }
+            { path: 'dashboard', component: DashboardAdmin }
         ]
     },
     {
@@ -50,7 +50,7 @@ export const routes: Routes = [
         component: AppCustomer,
         canMatch: [customerGuard],
         children: [
-            { path: '', component: DashboardCustomer }
+            { path: 'dashboard', component: DashboardCustomer }
         ]
     },
     {
