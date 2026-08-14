@@ -7,6 +7,7 @@
         public string? Username { get; set; }
         public string? FullName { get; set; }
         public List<string>? Roles { get; set; }
+        public string? ErrorCode { get; set; }
         public List<string>? Errors { get; set; }
         public string Message { get;  set; }
     }

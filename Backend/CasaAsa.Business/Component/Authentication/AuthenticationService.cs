@@ -1,4 +1,7 @@
-﻿using CasaAsa.Core.BusinessModels.Authentication;
+﻿using CasaAsa.Business.Constants;
+using CasaAsa.Core.BusinessModels.Authentication;
+using CasaAsa.Core.BusinessModels.UserProfile;
+using CasaAsa.Core.Configuration;
 using CasaAsa.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -37,6 +40,11 @@ namespace CasaAsa.Business.Component.Administration.Authentication
         {
             var result = await RegisterUserAsync(register);
 
+            if (!result.Success)
+            {
+                return result;
+            }
+
             if (result.TokenResponse == null)
             {
                 return result;
@@ -53,7 +61,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 await _addressComponent.CreateAddressAsync(address, result.TokenResponse.UserId);
             }
 
-            _logger.LogInformation($"User {register.Email} has been registered.");
+            _logger.LogInformation("User {Email} has been registered.", register.Email);
 
             return result;
         }
@@ -64,7 +72,8 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             {
                 return new AuthenticationResult
                 {
-                    Succeeded = false,
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.EMAIL_EXISTS,
                     Errors = ["Email already registered."]
                 };
             }
@@ -83,7 +92,8 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             {
                 return new AuthenticationResult
                 {
-                    Succeeded = false,
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.USER_REGISTRATION_ERRORS,
                     Errors = result.Errors.Select(ex => ex.Description).ToList(),
                 };
             }
@@ -108,7 +118,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             return new AuthenticationResult
             {
                 TokenResponse = tokenResponse,
-                Succeeded = true,
+                Success = true,
                 Errors = [],
                 FullName = user.FullName,
             };
@@ -121,8 +131,19 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             {
                 return new AuthenticationResult
                 {
-                    Succeeded = false,
-                    Errors = ["Invalid credentials."]
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.USER_NOT_FOUND,
+                    Errors = ["User not found."]
+                };
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                return new AuthenticationResult
+                {
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.EMAIL_NOT_CONFIRMED,
+                    Errors = ["Your email address has not been confirmed.Please confirm your email before signing in."]
                 };
             }
 
@@ -131,7 +152,8 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             {
                 return new AuthenticationResult
                 {
-                    Succeeded = false,
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.INVALID_CREDENTIALS,
                     Errors = ["Invalid credentials."]
                 };
             }
@@ -149,21 +171,26 @@ namespace CasaAsa.Business.Component.Administration.Authentication
 
             return new AuthenticationResult
             {
-                Succeeded = true,
+                Success = true,
                 TokenResponse = response,
                 Errors = [],
                 FullName = user.FullName,
             };
         }
 
-        public async Task<(bool success, string message)> ConfirmEmailAsync(Guid userId, string token)
+        public async Task<AuthenticationResult> ConfirmEmailAsync(Guid userId, string token)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
             if (user == null)
             {
                 _logger.LogError("User not found. UserId: {userId}", userId.ToString());
-                return (success: false, message: "User not found.");
+                return new AuthenticationResult
+                {
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.USER_NOT_FOUND,
+                    Errors = ["User not found"]
+                };
             }
 
             var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
@@ -175,22 +202,38 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 var errorDescriptions = string.Join("; ", result.Errors.Select(e => e.Description));
                 _logger.LogError("Confirmation error: {ErrorDescriptions}", errorDescriptions);
 
-                return (success: false, message: $"Confirmation error: {errorDescriptions}");
+                //return (success: false, message: $"Confirmation error: {errorDescriptions}");
+                return new AuthenticationResult
+                {
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.USER_CONFIRMATION_ERRORS,
+                    Errors = result.Errors.Select(e => e.Description).ToList(),
+                };
             }
 
             _logger.LogInformation("User {UserName} is confirmed.", user.UserName);
 
-            return (success: true, message: "Welcome to Casa Asa. You can now login.");
+            return new AuthenticationResult
+            {
+                Success = true,
+                Errors = []
+            };
         }
 
-        public async Task<(bool success, string message)> ChangeNewPassword(Guid userId, string token, string newPassword)
+        public async Task<AuthenticationResult> ChangeNewPassword(Guid userId, string token, string newPassword)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
             if (user == null)
             {
                 _logger.LogError("User not found. UserId: {userId}", userId.ToString());
-                return (success: false, message: "User not found.");
+                
+                return new AuthenticationResult
+                {
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.USER_NOT_FOUND,
+                    Errors = ["User not found"]
+                };
             }
 
             // Check if the new password is the same as the one in the table
@@ -199,7 +242,13 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             if (isSamePassword)
             {
                 _logger.LogError("New password is the same as the current password.");
-                return (success: false, message: "New password is the same as the current password.");
+                
+                return new AuthenticationResult
+                {
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.PASSWORD_ERROR,
+                    Errors = ["New password is the same as the current password."]
+                };
             }
 
             string decodedToken;
@@ -212,7 +261,12 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             {
                 _logger.LogError(ex, "The password reset link is invalid or has expired.");
 
-                return (success: false, message: "The password reset link is invalid or has expired.");
+                return new AuthenticationResult
+                {
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.TOKEN_EXPIRED,
+                    Errors = ["The password reset link is invalid or has expired."]
+                };
             }
 
             // Update access failed count and access failed count
@@ -226,12 +280,22 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 var errorDescriptions = string.Join("; ", result.Errors.Select(e => e.Description));
                 _logger.LogError("Change password error: {ErrorDescriptions}", errorDescriptions);
 
-                return (success: false, message: $"Change password errors {errorDescriptions}");
+                //return (success: false, message: $"Change password errors {errorDescriptions}");
+                return new AuthenticationResult
+                {
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.CHANGE_PASSWORD_ERRORS,
+                    Errors = result.Errors.Select(e => e.Description).ToList()
+                };
             }
 
             _logger.LogInformation("User {Username} has changed password.", user.UserName);
 
-            return (success: result.Succeeded, message: $"User {user.UserName} has changed password.");
+            return new AuthenticationResult
+            {
+                Success = result.Succeeded,
+                Errors = []
+            };
         }
 
         public async Task<AuthenticationResult> ForgotPassword(string username)
@@ -244,7 +308,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
 
                 return new AuthenticationResult
                 {
-                    Succeeded = true,
+                    Success = true,
                     Errors = []
                 };
             }
@@ -264,7 +328,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
             return new AuthenticationResult
             {
                 TokenResponse = tokenResponse,
-                Succeeded = true,
+                Success = true,
                 Errors = [],
                 FullName = user.FullName
             };

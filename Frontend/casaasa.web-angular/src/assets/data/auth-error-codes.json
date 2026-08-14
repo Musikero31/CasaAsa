@@ -1,0 +1,32 @@
+[
+    {
+        "code": "EMAIL_NOT_CONFIRMED"
+    },
+    {
+        "code": "USER_NOT_FOUND"
+    },
+    {
+        "code": "EMAIL_EXISTS"
+    },
+    {
+        "code": "USER_REGISTRATION_ERRORS"
+    },
+    {
+        "code": "USER_CONFIRMATION_ERRORS"
+    },
+    {
+        "code": "CHANGE_PASSWORD_ERRORS"
+    },
+    {
+        "code": "INVALID_CREDENTIALS"
+    },
+    {
+        "code": "MISSING_INFORMATION"
+    },
+    {
+        "code": "PASSWORD_ERROR"
+    },
+    {
+        "code": "TOKEN_EXPIRED"
+    }
+]
