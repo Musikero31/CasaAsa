@@ -6,6 +6,7 @@ import { AuthenticationService } from '../../../core/services/authentication.ser
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
 import { NotificationService } from '../../../core/services/notification.service';
+import { AuthErrorCodes } from '../../../shared/enums/auth-error-codes.enum';
 
 @Component({
   selector: 'casa-login',
@@ -22,6 +23,8 @@ export class Login implements OnInit {
   private _authSvc = inject(AuthenticationService);
 
   message: string | null = null;
+
+  isEmailConfirmed: boolean = true;
   
   loginForm = this._formBuilder.group({
     username: ['', [Validators.required, Validators.email]],
@@ -75,8 +78,14 @@ export class Login implements OnInit {
             }
           }
           else {
-            console.error('Login failed', loggedUser.errors);
-            this._notificationSvc.showMessage('An error occurred while trying to login.');
+            if (loggedUser.errorCode === AuthErrorCodes.EmailNotConfirmed) {
+              this.isEmailConfirmed = false;
+              this._notificationSvc.showMessage('Your email address has not been confirmed. Please check your email for a confirmation link.');
+            }
+            else {
+              console.error('Login failed', loggedUser.errors);
+              this._notificationSvc.showMessage('An error occurred while trying to login.');
+            }
           }
         },
         error: (err) => {
@@ -86,4 +95,7 @@ export class Login implements OnInit {
       });
   }
 
+  resendConfirmationEmail() {
+    
+  }
 }

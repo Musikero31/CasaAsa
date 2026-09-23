@@ -47,6 +47,21 @@
           Sign In
         </button>
 
+        @if (!isEmailConfirmed) {
+          <div class="confirmation-message">
+            <p>
+                Your email address has not been confirmed.
+                Please confirm your email before signing in.
+            </p>
+
+            <button
+                type="button"
+                class="btn btn-link"
+                (click)="resendConfirmationEmail()">
+                Resend confirmation email
+            </button>
+          </div>
+        }
       </form>
 
       <hr class="my-4">

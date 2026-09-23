@@ -143,7 +143,7 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 {
                     Success = false,
                     ErrorCode = AuthErrorCodes.EMAIL_NOT_CONFIRMED,
-                    Errors = ["Your email address has not been confirmed.Please confirm your email before signing in."]
+                    Errors = ["Your email address has not been confirmed. Please confirm your email before signing in."]
                 };
             }
 
