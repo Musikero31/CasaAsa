@@ -87,7 +87,7 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
             }
 
             // Retrieve the template
-            if (result.TokenResponse != null)
+            if (result.Success && result.TokenResponse != null)
             {
                 await SendConfirmationEmail(result, ApplicationSettingsKeys.CONFIRM_EMAIL_TEMPLATE);
             }
