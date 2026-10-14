@@ -36,6 +36,14 @@ export class Login implements OnInit {
   ngOnInit(): void {
     this.message = this._notificationSvc.message();
     this._notificationSvc.clearMessage();
+
+    this.loginForm.controls.username.valueChanges
+      .pipe(
+        takeUntilDestroyed(this._destroyRef)
+      )
+      .subscribe(() => {
+        this.showResendConfirmation = false;
+      });
   }
   
   login() {
@@ -59,13 +67,9 @@ export class Login implements OnInit {
               this._cdRef.detectChanges(); // Trigger change detection to update the view              
               this._notificationSvc.showMessage('Your email is not confirmed. Please check your email for the confirmation link.');
             }
-            else {
-              console.error('Login failed:', loggedUser.errors);
-              this._notificationSvc.showMessage(loggedUser.message);
-            }
-
+            
             return;
-          }
+          }          
 
           this._authSvc.setCurrentUser(loggedUser);
 
@@ -85,7 +89,8 @@ export class Login implements OnInit {
         },
         error: (err) => {
           console.error('Login request error', err);
-          this._notificationSvc.showMessage('An error occurred while trying to login.');
+          const msg = err?.error?.errors?.[0] ?? 'An error occurred while trying to login.';
+          this._notificationSvc.showMessage(msg);
         }
       });
   }
@@ -108,7 +113,10 @@ export class Login implements OnInit {
             this._notificationSvc.showMessage(response.message);
             return;
           }
-          this._notificationSvc.showMessage('Confirmation email has been resent successfully.');
+          else {
+            this.showResendConfirmation = false;
+            this._notificationSvc.showMessage('Confirmation email has been resent successfully.');
+          }
         },
         error: (err) => {
           console.error('Resend confirmation email error', err);

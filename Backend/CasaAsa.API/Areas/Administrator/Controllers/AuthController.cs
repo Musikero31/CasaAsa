@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using CasaAsa.API.Areas.Administrator.Data;
 using CasaAsa.API.Areas.Administrator.Models;
 using CasaAsa.Business.Component.Administration.Authentication;
@@ -85,12 +86,17 @@ namespace CasaAsa.API.Areas.Administrator.Controllers
                 });
             }
 
-            var response = PrepareLoginResponse(result);
-
             // Retrieve the template
-            await SendConfirmationEmail(result, ApplicationSettingsKeys.CONFIRM_EMAIL_TEMPLATE);
+            if (result.TokenResponse != null)
+            {
+                await SendConfirmationEmail(result, ApplicationSettingsKeys.CONFIRM_EMAIL_TEMPLATE);
+            }
 
-            return Ok(response);
+            return Ok(new AuthenticationResponse
+            {
+                Success = true,
+                Message = "If the account requires confirmation, a confirmation email has been sent."
+            });
         }
 
         [HttpPost]

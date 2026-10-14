@@ -72,22 +72,59 @@ namespace CasaAsa.Business.Component.Administration.Authentication
                 return new AuthenticationResult
                 {
                     Success = false,
-                    ErrorCode = AuthErrorCodes.USER_NOT_FOUND,
-                    Errors = ["User not found."]
+                    ErrorCode = AuthErrorCodes.INVALID_CREDENTIALS,
+                    Errors = ["Invalid credentials."]
                 };
             }
 
+            // Reject locked-out accounts before checking the password
+            bool isLockedOut = await _userManager.IsLockedOutAsync(user);
+
+            if (isLockedOut)
+            {
+                return new AuthenticationResult
+                {
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.INVALID_CREDENTIALS,
+                    Errors = ["Invalid credentials"]
+                };
+            }
+
+            // Verify the password before revealing the confirmation status
+            bool isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
+
+            if (!isPasswordValid)
+            {
+                await _userManager.AccessFailedAsync(user);
+
+                return new AuthenticationResult
+                {
+                    Success = false,
+                    ErrorCode = AuthErrorCodes.INVALID_CREDENTIALS,
+                    Errors = ["Invalid credentials."]
+                };
+            }
+
+            // Only reveal confirmation status after a valid password.
             if (!user.EmailConfirmed)
             {
                 return new AuthenticationResult
                 {
                     Success = false,
                     ErrorCode = AuthErrorCodes.EMAIL_NOT_CONFIRMED,
-                    Errors = ["Your email address has not been confirmed. Please confirm your email before signing in."]
+                    Errors =
+                    [
+                        "Your email address has not been confirmed. Please confirm your email before signing in."
+                    ]
                 };
             }
 
-            var signInResult = await _signInManager.PasswordSignInAsync(user, password, isPersistent: false, lockoutOnFailure: true);
+            // Continue with the rest of your login process.
+            var signInResult = await _signInManager.PasswordSignInAsync(user,
+                                                                        password,
+                                                                        isPersistent: false,
+                                                                        lockoutOnFailure: true);
+
             if (!signInResult.Succeeded)
             {
                 return new AuthenticationResult
@@ -285,13 +322,13 @@ namespace CasaAsa.Business.Component.Administration.Authentication
         {
             var user = await _userManager.FindByEmailAsync(username);
 
-            if (user == null)
+            if (user == null || user.EmailConfirmed)
             {
                 return new AuthenticationResult
                 {
                     Success = false,
-                    ErrorCode = AuthErrorCodes.USER_NOT_FOUND,
-                    Errors = ["Email does not exist"]
+                    ErrorCode = AuthErrorCodes.INVALID_CREDENTIALS,
+                    Errors = ["Invalid credentials."]
                 };
             }
 
