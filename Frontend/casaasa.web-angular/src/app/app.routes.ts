@@ -42,6 +42,7 @@ export const routes: Routes = [
         component: AppAdmin,
         canMatch: [adminGuard],
         children: [
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', component: DashboardAdmin }
         ]
     },
@@ -50,6 +51,7 @@ export const routes: Routes = [
         component: AppCustomer,
         canMatch: [customerGuard],
         children: [
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', component: DashboardCustomer }
         ]
     },
