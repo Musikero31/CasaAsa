@@ -22,7 +22,7 @@ namespace CasaAsa.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CasaAsa.Data.Models.Address", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.Address", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,7 +86,7 @@ namespace CasaAsa.Data.Migrations
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.ApplicationRole", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.ApplicationRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -114,7 +114,7 @@ namespace CasaAsa.Data.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.ApplicationSetting", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.ApplicationSetting", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -183,7 +183,7 @@ namespace CasaAsa.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.ApplicationUser", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.ApplicationUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -257,7 +257,7 @@ namespace CasaAsa.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.Documents", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.Documents", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -308,7 +308,7 @@ namespace CasaAsa.Data.Migrations
                     b.ToTable("Documents");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.LockOrder", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.LockOrder", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -339,7 +339,7 @@ namespace CasaAsa.Data.Migrations
                     b.ToTable("LockOrders");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.MenuCategory", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.MenuCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -371,7 +371,7 @@ namespace CasaAsa.Data.Migrations
                     b.ToTable("MenuCategories");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.MenuDetail", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.MenuDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -422,7 +422,85 @@ namespace CasaAsa.Data.Migrations
                     b.ToTable("MenuDetails");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.Order", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.MenuOfTheDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("ActiveStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActivated")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LockDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("MenuDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MenuOfTheDay");
+                });
+
+            modelBuilder.Entity("CasaAsa.Data.Entities.MenuOfTheDayDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("ActiveStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MenuDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MenuOfTheDayId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuDetailId");
+
+                    b.HasIndex("MenuOfTheDayId");
+
+                    b.ToTable("MenuOfTheDayDetail");
+                });
+
+            modelBuilder.Entity("CasaAsa.Data.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -467,7 +545,7 @@ namespace CasaAsa.Data.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.OrderDetail", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.OrderDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -506,7 +584,7 @@ namespace CasaAsa.Data.Migrations
                     b.ToTable("OrderDetails");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.OrderListSummary", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.OrderListSummary", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -549,7 +627,7 @@ namespace CasaAsa.Data.Migrations
                     b.ToTable("OrderListSummaries");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.RevokedToken", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.RevokedToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -700,9 +778,9 @@ namespace CasaAsa.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.Address", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.Address", b =>
                 {
-                    b.HasOne("CasaAsa.Data.Models.ApplicationUser", "User")
+                    b.HasOne("CasaAsa.Data.Entities.ApplicationUser", "User")
                         .WithMany("Addresses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -711,13 +789,13 @@ namespace CasaAsa.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.MenuDetail", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.MenuDetail", b =>
                 {
-                    b.HasOne("CasaAsa.Data.Models.Documents", "Document")
+                    b.HasOne("CasaAsa.Data.Entities.Documents", "Document")
                         .WithMany("MenuDetails")
                         .HasForeignKey("DocumentId");
 
-                    b.HasOne("CasaAsa.Data.Models.MenuCategory", "MenuCategory")
+                    b.HasOne("CasaAsa.Data.Entities.MenuCategory", "MenuCategory")
                         .WithMany("MenuDetails")
                         .HasForeignKey("MenuCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -728,9 +806,28 @@ namespace CasaAsa.Data.Migrations
                     b.Navigation("MenuCategory");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.Order", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.MenuOfTheDayDetail", b =>
                 {
-                    b.HasOne("CasaAsa.Data.Models.Address", "Address")
+                    b.HasOne("CasaAsa.Data.Entities.MenuDetail", "MenuDetail")
+                        .WithMany("MenuOfTheDayDetails")
+                        .HasForeignKey("MenuDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CasaAsa.Data.Entities.MenuOfTheDay", "MenuOfTheDay")
+                        .WithMany("MenuOfTheDayDetails")
+                        .HasForeignKey("MenuOfTheDayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MenuDetail");
+
+                    b.Navigation("MenuOfTheDay");
+                });
+
+            modelBuilder.Entity("CasaAsa.Data.Entities.Order", b =>
+                {
+                    b.HasOne("CasaAsa.Data.Entities.Address", "Address")
                         .WithMany("Orders")
                         .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -739,9 +836,9 @@ namespace CasaAsa.Data.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.OrderDetail", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.OrderDetail", b =>
                 {
-                    b.HasOne("CasaAsa.Data.Models.Order", "Order")
+                    b.HasOne("CasaAsa.Data.Entities.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -750,9 +847,9 @@ namespace CasaAsa.Data.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.OrderListSummary", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.OrderListSummary", b =>
                 {
-                    b.HasOne("CasaAsa.Data.Models.Order", "Order")
+                    b.HasOne("CasaAsa.Data.Entities.Order", "Order")
                         .WithMany("OrderListSummaries")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -763,7 +860,7 @@ namespace CasaAsa.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("CasaAsa.Data.Models.ApplicationRole", null)
+                    b.HasOne("CasaAsa.Data.Entities.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -772,7 +869,7 @@ namespace CasaAsa.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("CasaAsa.Data.Models.ApplicationUser", null)
+                    b.HasOne("CasaAsa.Data.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -781,7 +878,7 @@ namespace CasaAsa.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("CasaAsa.Data.Models.ApplicationUser", null)
+                    b.HasOne("CasaAsa.Data.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -790,21 +887,21 @@ namespace CasaAsa.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("CasaAsa.Data.Models.ApplicationRole", null)
+                    b.HasOne("CasaAsa.Data.Entities.ApplicationRole", null)
                         .WithMany("UserRoles")
                         .HasForeignKey("ApplicationRoleId");
 
-                    b.HasOne("CasaAsa.Data.Models.ApplicationUser", null)
+                    b.HasOne("CasaAsa.Data.Entities.ApplicationUser", null)
                         .WithMany("UserRoles")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("CasaAsa.Data.Models.ApplicationRole", null)
+                    b.HasOne("CasaAsa.Data.Entities.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CasaAsa.Data.Models.ApplicationUser", null)
+                    b.HasOne("CasaAsa.Data.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -813,41 +910,51 @@ namespace CasaAsa.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("CasaAsa.Data.Models.ApplicationUser", null)
+                    b.HasOne("CasaAsa.Data.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.Address", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.Address", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.ApplicationRole", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.ApplicationRole", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.ApplicationUser", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Addresses");
 
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.Documents", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.Documents", b =>
                 {
                     b.Navigation("MenuDetails");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.MenuCategory", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.MenuCategory", b =>
                 {
                     b.Navigation("MenuDetails");
                 });
 
-            modelBuilder.Entity("CasaAsa.Data.Models.Order", b =>
+            modelBuilder.Entity("CasaAsa.Data.Entities.MenuDetail", b =>
+                {
+                    b.Navigation("MenuOfTheDayDetails");
+                });
+
+            modelBuilder.Entity("CasaAsa.Data.Entities.MenuOfTheDay", b =>
+                {
+                    b.Navigation("MenuOfTheDayDetails");
+                });
+
+            modelBuilder.Entity("CasaAsa.Data.Entities.Order", b =>
                 {
                     b.Navigation("OrderDetails");
 
