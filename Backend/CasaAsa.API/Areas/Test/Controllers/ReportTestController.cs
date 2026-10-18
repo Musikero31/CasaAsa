@@ -1,4 +1,5 @@
 ﻿using CasaAsa.Business.Component.Configuration;
+using CasaAsa.Business.Component.Notifications;
 using CasaAsa.Business.Constants;
 using CasaAsa.Core.Configuration;
 using Microsoft.AspNetCore.Mvc;

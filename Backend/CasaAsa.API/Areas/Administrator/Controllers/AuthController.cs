@@ -4,6 +4,7 @@ using CasaAsa.API.Areas.Administrator.Data;
 using CasaAsa.API.Areas.Administrator.Models;
 using CasaAsa.Business.Component.Administration.Authentication;
 using CasaAsa.Business.Component.Configuration;
+using CasaAsa.Business.Component.Notifications;
 using CasaAsa.Business.Constants;
 using CasaAsa.Core.BusinessModels.Authentication;
 using CasaAsa.Core.Configuration;

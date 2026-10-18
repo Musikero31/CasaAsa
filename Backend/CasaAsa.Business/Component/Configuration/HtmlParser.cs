@@ -1,5 +1,4 @@
-﻿using AutoMapper.Configuration.Conventions;
-using CasaAsa.Core.Configuration;
+﻿using CasaAsa.Core.Configuration;
 using HtmlAgilityPack;
 
 namespace CasaAsa.Business.Component.Configuration

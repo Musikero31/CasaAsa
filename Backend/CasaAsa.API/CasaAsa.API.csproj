@@ -43,6 +43,10 @@
 
   <ItemGroup>
     <Folder Include="Areas\Administrator\Views\" />
+    <Folder Include="Areas\MealPLan\Controllers\" />
+    <Folder Include="Areas\MealPLan\Data\" />
+    <Folder Include="Areas\MealPLan\Models\" />
+    <Folder Include="Areas\MealPLan\Views\" />
     <Folder Include="Areas\Menu\Views\" />
     <Folder Include="Areas\OrderBilling\Controllers\" />
     <Folder Include="Areas\OrderBilling\Data\" />

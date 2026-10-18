@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
 
-namespace CasaAsa.Business.Component.Configuration
+namespace CasaAsa.Business.Component.Notifications
 {
     public class MailComponent : IMailComponent
     {

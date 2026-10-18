@@ -1,6 +1,6 @@
 ﻿using CasaAsa.Core.Configuration;
 
-namespace CasaAsa.Business.Component.Configuration
+namespace CasaAsa.Business.Component.Notifications
 {
     public interface IMailComponent
     {

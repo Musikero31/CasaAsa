@@ -1,7 +1,7 @@
 using CasaAsa.API.Configuration;
 using CasaAsa.API.Configuration.Profiles;
 using CasaAsa.Business.Component.Administration.Authentication;
-using CasaAsa.Business.Component.Configuration;
+using CasaAsa.Business.Component.Notifications;
 using CasaAsa.Business.Profiles;
 using CasaAsa.Data.Database;
 using CasaAsa.Data.Entities;

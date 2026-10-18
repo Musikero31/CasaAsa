@@ -1,4 +1,4 @@
-﻿namespace CasaAsa.Business.Component.Configuration
+﻿namespace CasaAsa.Business.Component.Notifications
 {
     public class MailConfiguration
     {
