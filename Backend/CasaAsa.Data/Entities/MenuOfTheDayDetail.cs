@@ -12,6 +12,7 @@ namespace CasaAsa.Data.Entities
         /// This is to be used on whether the menu is available or sold out
         /// </summary>
         public bool IsAvailable { get; set; }
+        public int AvailableServings { get; set; }
 
         public bool ActiveStatus { get; set; }
         public Guid CreatedBy { get; set; }

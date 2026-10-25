@@ -6,9 +6,13 @@ export const customerGuard: CanMatchFn = () => {
     const _authService = inject(AuthenticationService)
     const _router = inject(Router)
 
-    if (_authService.roles().includes('Customer')) {
-        return true;
+    if (!_authService.roles().includes('Customer')) {
+        return _router.createUrlTree(["/admin/dashboard"]);
     }
 
-    return _router.createUrlTree(["/login"])
+    if(!_authService.isLoggedIn()) {
+        return _router.createUrlTree(["/login"])
+    }
+
+    return true;
 };

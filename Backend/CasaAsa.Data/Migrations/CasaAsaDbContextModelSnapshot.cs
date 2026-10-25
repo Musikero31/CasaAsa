@@ -470,6 +470,9 @@ namespace CasaAsa.Data.Migrations
                     b.Property<bool>("ActiveStatus")
                         .HasColumnType("bit");
 
+                    b.Property<int>("AvailableServings")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 

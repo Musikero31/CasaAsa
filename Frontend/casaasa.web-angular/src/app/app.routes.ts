@@ -10,6 +10,8 @@ import { customerGuard } from './core/guards/customer.guard';
 import { Register } from './features/auth/register/register';
 import { Confirmation } from './features/auth/confirmation/confirmation';
 import { ChangePassword } from './features/auth/change-password/change-password';
+import { MealOfTheDayAdmin } from './features/admin/meal-of-the-day.admin/meal-of-the-day.admin';
+import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
     {
@@ -40,16 +42,24 @@ export const routes: Routes = [
     {
         path: "admin",
         component: AppAdmin,
-        canMatch: [adminGuard],
+        canActivate: [roleGuard],
+        data: { roles: ['Admin'] },
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', component: DashboardAdmin }
         ]
     },
     {
+        path: "admin/meal-of-the-day",
+        component: MealOfTheDayAdmin,
+        canActivate: [roleGuard],
+        data: { roles: ['Admin'] }
+    },
+    {
         path: 'customer',
         component: AppCustomer,
-        canMatch: [customerGuard],
+        canActivate: [roleGuard],
+        data: { roles: ['Customer'] },
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', component: DashboardCustomer }

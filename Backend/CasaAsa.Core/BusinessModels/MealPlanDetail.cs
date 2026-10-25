@@ -6,5 +6,6 @@
         public int MenuOfTheDayId { get; set; }
         public int MenuDetailId { get; set; }
         public bool IsAvailable { get; set; }
+        public int AvailableServings { get; set; }
     }
 }
