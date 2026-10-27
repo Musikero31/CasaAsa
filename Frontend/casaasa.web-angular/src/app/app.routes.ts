@@ -10,7 +10,7 @@ import { customerGuard } from './core/guards/customer.guard';
 import { Register } from './features/auth/register/register';
 import { Confirmation } from './features/auth/confirmation/confirmation';
 import { ChangePassword } from './features/auth/change-password/change-password';
-import { MealOfTheDayAdmin } from './features/admin/meal-of-the-day.admin/meal-of-the-day.admin';
+import { MealOfTheDayAdmin } from './features/menu/meal-of-the-day.admin/meal-of-the-day.admin';
 import { roleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
