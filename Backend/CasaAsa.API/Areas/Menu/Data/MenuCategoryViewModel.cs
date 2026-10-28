@@ -3,7 +3,7 @@
     public class MenuCategoryViewModel
     {
         public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public List<MenuViewModel> Menus { get; set; }
+        public string? CategoryName { get; set; }
+        public List<MenuViewModel>? Menus { get; set; }
     }
 }

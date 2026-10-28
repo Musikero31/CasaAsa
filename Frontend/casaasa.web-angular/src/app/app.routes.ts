@@ -12,6 +12,7 @@ import { Confirmation } from './features/auth/confirmation/confirmation';
 import { ChangePassword } from './features/auth/change-password/change-password';
 import { MealOfTheDayAdmin } from './features/menu/meal-of-the-day.admin/meal-of-the-day.admin';
 import { roleGuard } from './core/guards/role.guard';
+import { MenuDetail } from './features/menu/menu-detail/menu-detail';
 
 export const routes: Routes = [
     {
@@ -48,6 +49,12 @@ export const routes: Routes = [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', component: DashboardAdmin }
         ]
+    },
+    {
+        path: "admin/menu-detail",
+        component: MenuDetail,
+        canActivate: [roleGuard],
+        data: { roles: ['Admin'] }
     },
     {
         path: "admin/meal-of-the-day",

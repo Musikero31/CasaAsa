@@ -32,7 +32,6 @@ export class PasswordComponent implements ControlValueAccessor, Validator {
   private _passwordFormBuilder = inject(FormBuilder);
   private _destroyRef = inject(DestroyRef);
   private onPasswordChange = (_: PasswordInfo | null) => {};  
-  private onPasswordValidatorChange = (_: () => void) => {};
   onPasswordTouched = () => {};
 
   readonly passwordForm = this._passwordFormBuilder.group({
@@ -63,9 +62,7 @@ export class PasswordComponent implements ControlValueAccessor, Validator {
     return this.passwordForm.errors || { invalid: true };
   }
 
-  registerOnValidatorChange?(fn: () => void): void {
-    this.onPasswordValidatorChange = fn;
-  }
+  registerOnValidatorChange?(fn: () => void): void { }
 
   writeValue(value: PasswordInfo | null): void {
     if (!value) {

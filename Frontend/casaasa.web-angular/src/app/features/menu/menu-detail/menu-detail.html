@@ -1,198 +1,32 @@
 
 <div class="container py-4">
-  <!-- Page Header -->
-  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-    <div>
-      <h2 class="mb-1">Replace this for a title</h2>
-      <p class="text-muted mb-0">
-        Manage menu item information and availability.
-      </p>
-    </div>
 
-    <button
-      type="button"
-      class="btn btn-outline-secondary"
-      (click)="onCancel()">
-      <i class="bi bi-arrow-left me-1"></i>
-      Back
-    </button>
-  </div>
-
-  <form (ngSubmit)="onSave()">
-
-    <!-- Menu Item Details -->
-    <div class="card shadow-sm mb-4">
-      <div class="card-header bg-white py-3">
-        <h5 class="mb-0">Menu Item Details</h5>
-      </div>
-
-      <div class="card-body">
-        <div class="row g-3">
-
-          <!-- Item Name -->
-          <div class="col-md-8">
-            <label for="name" class="form-label">
-              Menu Item Name <span class="text-danger">*</span>
-            </label>
-            <input
-              id="name"
-              type="text"
-              class="form-control"
-              formControlName="name"
-              placeholder="Enter menu item name"
-              maxlength="150" />
-            <!-- @if (menuForm.controls.name.touched &&
-                 menuForm.controls.name.invalid) {
-              <div class="text-danger small mt-1">
-                Menu item name is required.
-              </div>
-            } -->
-          </div>
-
-          <!-- Category -->
-          <div class="col-md-4">
-            <label for="categoryId" class="form-label">
-              Category <span class="text-danger">*</span>
-            </label>
-            <select
-              id="categoryId"
-              class="form-select"
-              formControlName="categoryId">
-              <!-- <option [ngValue]="null">Select category</option>
-              @for (category of categories; track category.id) {
-                <option [ngValue]="category.id">
-                  {{ category.name }}
-                </option>
-              } -->
-                <option></option>
-            </select>
-            <!-- @if (menuForm.controls.categoryId.touched &&
-                 menuForm.controls.categoryId.invalid) {
-              <div class="text-danger small mt-1">
-                Please select a category.
-              </div>
-            } -->
-          </div>
-
-          <!-- Description -->
-          <div class="col-12">
-            <label for="description" class="form-label">
-              Description
-            </label>
-            <textarea
-              id="description"
-              class="form-control"
-              formControlName="description"
-              rows="3"
-              placeholder="Describe the menu item">
-            </textarea>
-          </div>
-
-          <!-- Price -->
-          <div class="col-md-4">
-            <label for="price" class="form-label">
-              Price <span class="text-danger">*</span>
-            </label>
-            <div class="input-group">
-              <span class="input-group-text">$</span>
-              <input
-                id="price"
-                type="number"
-                class="form-control"
-                formControlName="price"
-                min="0"
-                step="0.01"
-                placeholder="0.00" />
-            </div>
-            <!-- @if (menuForm.controls.price.touched &&
-                 menuForm.controls.price.invalid) {
-              <div class="text-danger small mt-1">
-                Enter a valid price.
-              </div>
-            } -->
-          </div>
-
-          <!-- Image URL -->
-          <div class="col-md-8">
-            <label for="imageUrl" class="form-label">
-              Image URL
-            </label>
-            <input
-              id="imageUrl"
-              type="url"
-              class="form-control"
-              formControlName="imageUrl"
-              placeholder="https://example.com/image.jpg" />
-          </div>
-
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">Menu Details</h2>
+            <p class="text-muted mb-0">
+                View and manage menu item information.
+            </p>
         </div>
-      </div>
+
+        <button type="button" class="btn btn-outline-secondary">
+            Back
+        </button>
     </div>
 
-    <!-- Availability -->
-    <div class="card shadow-sm mb-4">
-      <div class="card-header bg-white py-3">
-        <h5 class="mb-0">Availability</h5>
-      </div>
+    <!-- Menu Item Information -->
+    <menu-item-info/>
 
-      <div class="card-body">
-        <div class="row g-3 align-items-center">
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-outline-secondary">
+            Cancel
+        </button>
 
-          <div class="col-md-6">
-            <div class="form-check form-switch">
-              <input
-                id="isAvailable"
-                type="checkbox"
-                class="form-check-input"
-                role="switch"
-                formControlName="isAvailable" />
-              <label class="form-check-label" for="isAvailable">
-                Available for ordering
-              </label>
-            </div>
-            <small class="text-muted">
-              Turn this off when customers cannot order this item.
-            </small>
-          </div>
-
-          <!-- Optional stock/portion count -->
-          <div class="col-md-6">
-            <label for="availableQuantity" class="form-label">
-              Available Portions
-            </label>
-            <input
-              id="availableQuantity"
-              type="number"
-              class="form-control"
-              formControlName="availableQuantity"
-              min="0"
-              step="1"
-              placeholder="Enter available portions" />
-            <small class="text-muted">
-              Set to zero when no portions remain.
-            </small>
-          </div>
-
-        </div>
-      </div>
+        <button type="submit" class="btn btn-primary">
+            Save
+        </button>
     </div>
 
-    <!-- Footer Actions -->
-    <div class="d-flex flex-wrap justify-content-end gap-2">
-      <button
-        type="button"
-        class="btn btn-outline-secondary"
-        (click)="onCancel()">
-        Cancel
-      </button>
-
-      <button
-        type="submit"
-        class="btn btn-primary">
-        <i class="bi bi-check-lg me-1"></i>
-        Save Menu Item
-      </button>
-    </div>
-
-  </form>
 </div>

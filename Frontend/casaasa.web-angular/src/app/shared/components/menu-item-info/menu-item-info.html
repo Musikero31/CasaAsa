@@ -1,0 +1,72 @@
+<!-- Menu Item Information -->
+<div class="card shadow-sm mb-4" [formGroup]="menuItemForm">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Menu Item Information</h5>
+    </div>
+
+    <div class="card-body">
+        <div class="row g-3">
+
+            <!-- Menu Item Name -->
+            <input type="hidden" id="id" formControlName="id"/>
+            <div class="col-md-8">
+                <label for="menuName" class="form-label">
+                    Menu Item Name
+                </label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="menuName"
+                    placeholder="Enter menu item name"
+                    formControlName="name">
+            </div>
+
+            <!-- Category -->
+            <div class="col-md-4">
+                <label for="category" class="form-label">
+                    Category
+                </label>
+                <select class="form-select" id="category" formControlName="categoryId">
+                    <option [ngValue]="0">Select category</option>
+                    @for (category of categories; track category.categoryId) {
+                        <option [ngValue]="category.categoryId">{{ category.categoryName }}</option>
+                    }                    
+                </select>
+            </div>
+
+            <!-- Description -->
+            <div class="col-12">
+                <label for="description" class="form-label">
+                    Description
+                </label>
+                <textarea
+                    class="form-control"
+                    id="description"
+                    rows="3"
+                    placeholder="Enter menu item description"
+                    formControlName="description"></textarea>
+            </div>
+
+            <!-- Price -->
+            <div class="col-md-4">
+                <label for="price" class="form-label">
+                    Price
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="price"
+                        placeholder="0.00"
+                        formControlName="price">
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="formFile" class="form-label">Default file input example</label>
+                <input class="form-control" type="file" id="formFile">
+            </div>
+        </div>
+    </div>
+</div>
