@@ -1,1 +1,62 @@
-<p>meal-of-the-day.admin works!</p>
+<div class="container py-4">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">Menu Details</h2>
+            <p class="text-muted mb-0">
+                View and manage menu item information.
+            </p>
+        </div>
+
+        <button type="button" class="btn btn-outline-secondary">
+            Back
+        </button>
+    </div>
+
+    <!-- Menu Item Information -->
+    <menu-item-info [isReadonly]="true" />
+
+    <!-- Availability -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">Availability</h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row g-3">
+
+                <!-- Availability Status -->
+                <div class="col-md-6">
+                    <div class="form-field">
+                        <div class="switch theme-success">
+                            <input type="checkbox" value="" id="switchsuccess" role="switch" switch checked>
+                        </div>
+                        <label for="switchsuccess">Available for ordering</label>
+                    </div>
+                </div>
+
+                <!-- Available Portions -->
+                <div class="col-md-6">
+                    <label for="portions" class="form-label">
+                        Available Portions
+                    </label>
+                    <input type="number" class="form-control" id="portions" placeholder="Enter available portions">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-outline-secondary">
+            Cancel
+        </button>
+
+        <button type="submit" class="btn btn-primary">
+            Save
+        </button>
+    </div>
+
+</div>

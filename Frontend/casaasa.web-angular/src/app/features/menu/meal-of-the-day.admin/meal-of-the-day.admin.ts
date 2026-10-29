@@ -1,9 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../../core/services/authentication.service';
+import { MenuItemInfo } from '../../../shared/components/menu-item-info/menu-item-info';
 
 @Component({
   selector: 'casa-meal-of-the-day-admin',
-  imports: [],
+  imports: [MenuItemInfo],
   templateUrl: './meal-of-the-day.admin.html',
   styleUrl: './meal-of-the-day.admin.scss',
 })

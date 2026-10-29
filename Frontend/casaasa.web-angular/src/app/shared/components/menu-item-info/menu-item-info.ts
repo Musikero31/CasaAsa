@@ -1,6 +1,8 @@
-import { Component, DestroyRef, forwardRef, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, DestroyRef, forwardRef, 
+  inject, OnInit, ChangeDetectorRef, Input } from '@angular/core';
 import { MenuApiService } from '../../services/features/menu-api.service';
-import { ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR,
+  ReactiveFormsModule, Validators } from '@angular/forms';
 import { MenuDetailModel } from '../../models/menu/menu-detail.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MenuCategoryModel } from '../../models/menu/menu-category.model';
@@ -24,6 +26,8 @@ export class MenuItemInfo implements OnInit, ControlValueAccessor {
   private _destroyRef = inject(DestroyRef);
   private _cdRef = inject(ChangeDetectorRef);
 
+  @Input() isReadonly = false;
+
   private onMenuItemChange = (_: MenuDetailModel | null) => {};
   categories: MenuCategoryModel[] = [];
 
@@ -31,9 +35,9 @@ export class MenuItemInfo implements OnInit, ControlValueAccessor {
     id: [0],
     name: ['', [Validators.required]],
     description: ['', [Validators.required]],
-    categoryId: [0],
+    categoryId: [0, [Validators.required, Validators.min(1)]],
     categoryName: ['', [Validators.required]],
-    price: [0, [Validators.required, Validators.min(0)]],
+    price: [0, [Validators.required, Validators.min(1)]],
     //imageUrl: ['']
   });
 

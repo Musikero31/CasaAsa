@@ -18,6 +18,7 @@
                     class="form-control"
                     id="menuName"
                     placeholder="Enter menu item name"
+                    [readOnly]="isReadonly"
                     formControlName="name">
             </div>
 
@@ -26,7 +27,7 @@
                 <label for="category" class="form-label">
                     Category
                 </label>
-                <select class="form-select" id="category" formControlName="categoryId">
+                <select class="form-select" id="category" formControlName="categoryId" [disabled]="isReadonly">
                     <option [ngValue]="0">Select category</option>
                     @for (category of categories; track category.categoryId) {
                         <option [ngValue]="category.categoryId">{{ category.categoryName }}</option>
@@ -43,6 +44,7 @@
                     class="form-control"
                     id="description"
                     rows="3"
+                    [readOnly]="isReadonly"
                     placeholder="Enter menu item description"
                     formControlName="description"></textarea>
             </div>
@@ -59,6 +61,7 @@
                         class="form-control"
                         id="price"
                         placeholder="0.00"
+                        [readOnly]="isReadonly"
                         formControlName="price">
                 </div>
             </div>
